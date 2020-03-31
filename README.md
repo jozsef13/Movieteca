@@ -6,3 +6,4 @@ Built with:
  - Spring Boot
  - Rest web services
  - MySQL
+ - JPA and JSP
