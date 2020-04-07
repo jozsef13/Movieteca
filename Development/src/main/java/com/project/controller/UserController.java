@@ -11,11 +11,12 @@ import com.project.module.User;
 import com.project.repository.UserRepository;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(UserController.CONTRACT_BASE_URL)
 public class UserController {
 	
 	@Autowired
 	private UserRepository userRepo;
+	public static final String CONTRACT_BASE_URL = "/user";
 	
 	@GetMapping("/users")
 	public List<User> getAllUsers()
