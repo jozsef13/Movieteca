@@ -1,7 +1,9 @@
 package com.project.module;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "cart")
-
+@Table(name = "`cart`")
 public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,9 +23,13 @@ public class Cart {
 	private float totalPrice;
 	@OneToOne
 	private Customer customer;
-	@ManyToMany
-	@JoinTable(name = "movies_cart", joinColumns = @JoinColumn(name = "cartId"), inverseJoinColumns = @JoinColumn(name = "movieId"))
-	private Set<Movie> moviesInCart;
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "moviesFromCart", joinColumns = @JoinColumn(name = "cartId"), inverseJoinColumns = @JoinColumn(name = "movieId"))
+	private Set<Movie> moviesInCart = new HashSet<Movie>();
+
+	public void addMovieToCart(Movie movie) {
+		moviesInCart.add(movie);
+	}
 
 	public int getId() {
 		return id;

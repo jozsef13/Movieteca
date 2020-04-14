@@ -12,9 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "provider")
+@Table(name = "`provider`")
 public class Provider extends User {
-	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int providerId;
 	private int nrMoviesSold;
@@ -29,21 +28,23 @@ public class Provider extends User {
 	private Set<ProviderReview> receivedReviews;
 	@OneToMany(mappedBy = "provider")
 	private Set<Movie> moviesPosted;
-	@ManyToOne
-	@JoinColumn(name = "planId", nullable = false)
-	private PaymentPlan paymentPlan;
+//	@ManyToOne
+//	@JoinColumn(name = "planId", nullable = false)
+//	private PaymentPlan paymentPlan;
+	@OneToMany(mappedBy = "provider")
+	private Set<Message> newMessages;
 
 	public Set<ProviderReview> getReceivedReviews() {
 		return receivedReviews;
 	}
 
-	public PaymentPlan getPaymentPlan() {
-		return paymentPlan;
-	}
-
-	public void setPaymentPlan(PaymentPlan paymentPlan) {
-		this.paymentPlan = paymentPlan;
-	}
+//	public PaymentPlan getPaymentPlan() {
+//		return paymentPlan;
+//	}
+//
+//	public void setPaymentPlan(PaymentPlan paymentPlan) {
+//		this.paymentPlan = paymentPlan;
+//	}
 
 	public void setReceivedReviews(Set<ProviderReview> receivedReviews) {
 		this.receivedReviews = receivedReviews;

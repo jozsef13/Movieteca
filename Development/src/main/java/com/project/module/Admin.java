@@ -10,15 +10,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "admin")
+@Table(name = "`admin`")
 public class Admin extends User {
-
-	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int adminId;
 	private int numberOfRequests;
 	@OneToMany(mappedBy = "admin")
 	private Set<Request> receivedRequests;
+	@OneToMany(mappedBy = "admin")
+	private Set<Message> newMessages;
 
 	public Set<Request> getReceivedRequests() {
 		return receivedRequests;

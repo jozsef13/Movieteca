@@ -1,6 +1,7 @@
 package com.project.module;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "request")
+@Table(name="`request`")
 public class Request {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,9 +18,12 @@ public class Request {
 	private String requestType;
 	private String status;
 	private String requestObject;
-	@ManyToOne
-	@JoinColumn(name = "userId", nullable = false)
-	private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "adminId", nullable = false)
+	private Admin admin;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "providerId", nullable=false)
+	private Provider provider;
 
 	public int getId() {
 		return id;
@@ -29,12 +33,20 @@ public class Request {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public Admin getAdmin() {
+		return admin;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	public Provider getProvider() {
+		return provider;
+	}
+
+	public void setProvider(Provider provider) {
+		this.provider = provider;
 	}
 
 	public String getRequestType() {

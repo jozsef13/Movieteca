@@ -11,10 +11,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "customer")
-
-public class Customer {
-	@Id
+@Table(name = "`customer`")
+public class Customer extends User{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private int nrMoviesBought;
@@ -22,22 +20,42 @@ public class Customer {
 	private int nrMoviesInCart;
 	private int nrOfReviewsAdded;
 	@OneToMany(mappedBy = "customer")
-	private Set<Review> reviewsAdded;
+	private Set<ProviderReview> providerReviewsAdded;
+	@OneToMany(mappedBy = "customer")
+	private Set<MovieReview> movieReviewsAdded;
 	@OneToOne
 	private Cart cart;
 	@OneToMany(mappedBy = "customer")
 	private Set<Order> orders;
+	@OneToMany(mappedBy = "customer")
+	private Set<Message> newMessages;
+
+	public Set<ProviderReview> getProviderReviewsAdded() {
+		return providerReviewsAdded;
+	}
+
+	public void setProviderReviewsAdded(Set<ProviderReview> providerReviewsAdded) {
+		this.providerReviewsAdded = providerReviewsAdded;
+	}
+
+	public Set<MovieReview> getMovieReviewsAdded() {
+		return movieReviewsAdded;
+	}
+
+	public void setMovieReviewsAdded(Set<MovieReview> movieReviewsAdded) {
+		this.movieReviewsAdded = movieReviewsAdded;
+	}
+
+	public Set<Message> getNewMessages() {
+		return newMessages;
+	}
+
+	public void setNewMessages(Set<Message> newMessages) {
+		this.newMessages = newMessages;
+	}
 
 	public int getId() {
 		return id;
-	}
-
-	public Set<Review> getReviewsAdded() {
-		return reviewsAdded;
-	}
-
-	public void setReviewsAdded(Set<Review> reviewsAdded) {
-		this.reviewsAdded = reviewsAdded;
 	}
 
 	public Cart getCart() {

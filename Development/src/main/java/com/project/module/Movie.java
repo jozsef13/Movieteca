@@ -2,24 +2,25 @@ package com.project.module;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "movie")
-
+@Table(name="`movie`")
 public class Movie {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
-	private String postType;
 	private int stock;
 	private String genre;
 	private String mainActors;
@@ -33,17 +34,55 @@ public class Movie {
 	private String releaseDate;
 	private int nrOfReviews;
 	private float averageRating;
-	@ManyToOne
-	@JoinColumn(name = "providerId", nullable = false)
+	private float buyPrice;
+	private float rentPrice;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "providerId")
 	private Provider provider;
-	@OneToMany(mappedBy = "movie")
-	private Set<Review> reviewsReceived;
+	@OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<MovieReview> reviewsReceived;
+	@ManyToMany(mappedBy = "moviesInCart")
+	private Set<Cart> carts;
+	@ManyToMany(mappedBy = "orederedMovies")
+	private Set<Order> orders;
 
-	public Set<Review> getReviewsReceived() {
+	public float getBuyPrice() {
+		return buyPrice;
+	}
+
+	public void setBuyPrice(float buyPrice) {
+		this.buyPrice = buyPrice;
+	}
+
+	public float getRentPrice() {
+		return rentPrice;
+	}
+
+	public void setRentPrice(float rentPrice) {
+		this.rentPrice = rentPrice;
+	}
+
+	public Set<Cart> getCarts() {
+		return carts;
+	}
+
+	public void setCarts(Set<Cart> carts) {
+		this.carts = carts;
+	}
+
+	public Set<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
+	}
+
+	public Set<MovieReview> getReviewsReceived() {
 		return reviewsReceived;
 	}
 
-	public void setReviewsReceived(Set<Review> reviewsReceived) {
+	public void setReviewsReceived(Set<MovieReview> reviewsReceived) {
 		this.reviewsReceived = reviewsReceived;
 	}
 
@@ -70,15 +109,7 @@ public class Movie {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public String getPostType() {
-		return postType;
-	}
-
-	public void setPostType(String postType) {
-		this.postType = postType;
-	}
-
+	
 	public int getStock() {
 		return stock;
 	}

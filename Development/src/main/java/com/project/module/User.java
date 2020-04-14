@@ -9,14 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "user")
-@Inheritance(strategy = InheritanceType.JOINED)
+@MappedSuperclass
 public class User {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -26,20 +24,19 @@ public class User {
 	private String email;
 	private String userType;
 	private String sex;
-	private Date birthDate;
+	private String password;
+	private String birthDate;
 	private String country;
 	private String city;
 	private String phoneNumber;
 	private String nrOfNewMessages;
-	@OneToMany(mappedBy = "user")
-	private Set<Message> newMessages;
 
-	public Set<Message> getNewMessages() {
-		return newMessages;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setNewMessages(Set<Message> newMessages) {
-		this.newMessages = newMessages;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public int getId() {
@@ -98,11 +95,11 @@ public class User {
 		this.sex = sex;
 	}
 
-	public Date getBirthDate() {
+	public String getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
 
