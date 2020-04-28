@@ -3,9 +3,6 @@ package com.project.module;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -13,8 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "`customer`")
 public class Customer extends User{
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	
 	private int nrMoviesBought;
 	private int nrMoviesRented;
 	private int nrMoviesInCart;
@@ -28,7 +24,7 @@ public class Customer extends User{
 	@OneToMany(mappedBy = "customer")
 	private Set<Order> orders;
 	@OneToMany(mappedBy = "customer")
-	private Set<Message> newMessages;
+	private Set<Message> messages;
 
 	public Set<ProviderReview> getProviderReviewsAdded() {
 		return providerReviewsAdded;
@@ -46,18 +42,14 @@ public class Customer extends User{
 		this.movieReviewsAdded = movieReviewsAdded;
 	}
 
-	public Set<Message> getNewMessages() {
-		return newMessages;
+	public Set<Message> getMessages() {
+		return messages;
 	}
 
-	public void setNewMessages(Set<Message> newMessages) {
-		this.newMessages = newMessages;
+	public void setMessages(Set<Message> newMessages) {
+		this.messages = newMessages;
 	}
-
-	public int getId() {
-		return id;
-	}
-
+	
 	public Cart getCart() {
 		return cart;
 	}
@@ -72,10 +64,6 @@ public class Customer extends User{
 
 	public void setOrders(Set<Order> orders) {
 		this.orders = orders;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public int getNrMoviesBought() {

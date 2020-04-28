@@ -3,9 +3,6 @@ package com.project.module;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -14,12 +11,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "`provider`")
 public class Provider extends User {
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int providerId;
+
 	private int nrMoviesSold;
 	private int nrMoviesRented;
 	private int nrActivePosts;
-	private float averageRating;
+	private double averageRating;
 	private int nrOfReviews;
 	private int nrRequestSent;
 	@OneToMany(mappedBy = "provider")
@@ -28,23 +24,23 @@ public class Provider extends User {
 	private Set<ProviderReview> receivedReviews;
 	@OneToMany(mappedBy = "provider")
 	private Set<Movie> moviesPosted;
-//	@ManyToOne
-//	@JoinColumn(name = "planId", nullable = false)
-//	private PaymentPlan paymentPlan;
+	@ManyToOne
+	@JoinColumn(name = "planId", nullable = false)
+	private PaymentPlan paymentPlan;
 	@OneToMany(mappedBy = "provider")
-	private Set<Message> newMessages;
+	private Set<Message> messages;
 
 	public Set<ProviderReview> getReceivedReviews() {
 		return receivedReviews;
 	}
 
-//	public PaymentPlan getPaymentPlan() {
-//		return paymentPlan;
-//	}
-//
-//	public void setPaymentPlan(PaymentPlan paymentPlan) {
-//		this.paymentPlan = paymentPlan;
-//	}
+	public PaymentPlan getPaymentPlan() {
+		return paymentPlan;
+	}
+
+	public void setPaymentPlan(PaymentPlan paymentPlan) {
+		this.paymentPlan = paymentPlan;
+	}
 
 	public void setReceivedReviews(Set<ProviderReview> receivedReviews) {
 		this.receivedReviews = receivedReviews;
@@ -64,14 +60,6 @@ public class Provider extends User {
 
 	public void setRequestsSent(Set<Request> requestsSent) {
 		this.requestsSent = requestsSent;
-	}
-
-	public int getProviderId() {
-		return providerId;
-	}
-
-	public void setProviderId(int providerId) {
-		this.providerId = providerId;
 	}
 
 	public int getNrMoviesSold() {
@@ -98,11 +86,11 @@ public class Provider extends User {
 		this.nrActivePosts = nrActivePosts;
 	}
 
-	public float getAverageRating() {
+	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(float averageRating) {
+	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
 
@@ -121,4 +109,13 @@ public class Provider extends User {
 	public void setNrRequestSent(int nrRequestSent) {
 		this.nrRequestSent = nrRequestSent;
 	}
+
+	public Set<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Set<Message> messages) {
+		this.messages = messages;
+	}
+
 }
