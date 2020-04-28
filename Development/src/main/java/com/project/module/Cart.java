@@ -1,6 +1,6 @@
 package com.project.module;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,18 +18,14 @@ import javax.persistence.Table;
 @Table(name = "`cart`")
 public class Cart {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private float totalPrice;
+	private double totalPrice;
 	@OneToOne
 	private Customer customer;
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "moviesFromCart", joinColumns = @JoinColumn(name = "cartId"), inverseJoinColumns = @JoinColumn(name = "movieId"))
-	private Set<Movie> moviesInCart = new HashSet<Movie>();
-
-	public void addMovieToCart(Movie movie) {
-		moviesInCart.add(movie);
-	}
+	private Set<Movie> moviesInCart = new LinkedHashSet<Movie>();
 
 	public int getId() {
 		return id;
@@ -39,7 +35,7 @@ public class Cart {
 		this.id = id;
 	}
 
-	public float getTotalPrice() {
+	public double getTotalPrice() {
 		return totalPrice;
 	}
 
@@ -59,7 +55,7 @@ public class Cart {
 		this.moviesInCart = moviesInCart;
 	}
 
-	public void setTotalPrice(float totalPrice) {
+	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 }
