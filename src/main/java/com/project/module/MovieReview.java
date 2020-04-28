@@ -2,8 +2,6 @@ package com.project.module;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -11,8 +9,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "`movieReview`")
 public class MovieReview extends Review {
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int movieReviewId;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "movieId", nullable = false)
 	private Movie movie;
@@ -28,11 +25,11 @@ public class MovieReview extends Review {
 		this.movie = movie;
 	}
 
-	public int getMovieReviewId() {
-		return movieReviewId;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setMovieReviewId(int movieReviewId) {
-		this.movieReviewId = movieReviewId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 }

@@ -8,10 +8,10 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class Review {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String reviewText;
-	private float rating;
+	private double rating;
 
 	public int getId() {
 		return id;
@@ -29,11 +29,11 @@ public class Review {
 		this.reviewText = reviewText;
 	}
 
-	public float getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(float rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 }

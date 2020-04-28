@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name="`message`")
 public class Message {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String textMessage;
 	private String messageType;
