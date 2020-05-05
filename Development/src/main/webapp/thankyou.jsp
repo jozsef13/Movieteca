@@ -78,10 +78,11 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 				<li class="nav-item"><a href="/">Home</a></li>
 				<li class="nav-item"><a href="/movies">Movies</a></li>
 				<li class="nav-item"><a href="/contact">Contact</a></li>
-				<li class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-					<form action="/movies/search" class="site-block-top-search">
-						<span class="icon icon-search2"></span> 
-						<input type="text" class="form-control border-0" placeholder="Search.." name="nameString">
+				<li
+					class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+					<form action="" class="site-block-top-search">
+						<span class="icon icon-search2"></span> <input type="text"
+							class="form-control border-0" placeholder="Search">
 					</form>
 				</li>
 			</ul>

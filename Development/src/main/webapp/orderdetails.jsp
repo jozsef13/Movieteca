@@ -73,18 +73,19 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 	<nav class="site-navigation text-right text-md-center"
 		role="navigation">
 	<div class="container">
-			<ul class="site-menu js-clone-nav d-none d-md-block">
-				<li class="nav-item"><a href="/">Home</a></li>
-				<li class="nav-item"><a href="/movies">Movies</a></li>
-				<li class="nav-item"><a href="/contact">Contact</a></li>
-				<li class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-					<form action="/movies/search" class="site-block-top-search">
-						<span class="icon icon-search2"></span> 
-						<input type="text" class="form-control border-0" placeholder="Search.." name="nameString">
-					</form>
-				</li>
-			</ul>
-		</div>
+		<ul class="site-menu js-clone-nav d-none d-md-block">
+			<li class="nav-item"><a href="/">Home</a></li>
+			<li class="nav-item"><a href="/movies">Movies</a></li>
+			<li class="nav-item"><a href="/contact">Contact</a></li>
+			<li
+				class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+				<form action="" class="site-block-top-search">
+					<span class="icon icon-search2"></span> <input type="text"
+						class="form-control border-0" placeholder="Search">
+				</form>
+			</li>
+		</ul>
+	</div>
 	</nav> </header>
 
 	<div class="bg-light py-3">
@@ -110,9 +111,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 									<th class="product-thumbnail">Cover</th>
 									<th class="product-name">Movie Name</th>
 									<th class="product-buytype">Rent/Buy</th>
-									<th class="producet-quantity">Quantity</th>
 									<th class="product-price">Price</th>
-									<th class="product-return">Returning Date</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -126,25 +125,14 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 											<h2 class="h5 text-black">${movie.name}</h2>
 										</td>
 										<td>${movie.orderType}</td>
-										<td>${movie.orderQuantity}</td>
 										<td><c:choose>
 												<c:when test="${movie.orderType == 'Buy' }">
-														$<c:out value="${movie.orderQuantity * movie.buyPrice}" />
+														$<c:out value="${movie.buyPrice}" />
 												</c:when>
 												<c:otherwise>
-														$<c:out value="${movie.orderQuantity * movie.rentPrice}" />
+														$<c:out value="${movie.rentPrice}" />
 												</c:otherwise>
 											</c:choose></td>
-										<td>
-											<c:choose>
-												<c:when test="${movie.orderType == 'Rent'}">
-													<c:out value="${movie.returningDate}"></c:out>
-												</c:when>
-												<c:otherwise>
-													Bought
-												</c:otherwise>
-											</c:choose>
-										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
