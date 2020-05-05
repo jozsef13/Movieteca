@@ -273,9 +273,6 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 									</div>
 								</div>
 							</div>
-
-
-
 						</div>
 						<div class="row" data-aos="fade-up">
 							<div class="col-md-12 text-center">

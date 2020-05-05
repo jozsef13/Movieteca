@@ -40,7 +40,7 @@ public class Movie {
 	private double rentPrice;
 	private String imagePath;
 	private String orderType;
-	private int orderQuantity = 0;
+  private int orderQuantity = 0;
 	private String returningDate;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "providerId")
@@ -75,7 +75,6 @@ public class Movie {
 	public String getOrderType() {
 		return orderType;
 	}
-
 	public void setOrderType(String orderType) {
 		this.orderType = orderType;
 	}

@@ -86,7 +86,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 					</form>
 				</li>
 			</ul>
-		</div>
+	</div>
 	</nav> </header>
 
 		<div class="bg-light py-3">

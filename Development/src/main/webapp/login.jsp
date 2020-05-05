@@ -156,7 +156,6 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 							class="btn btn-primary btn-lg btn-block">Don't have an
 							account?</a>
 						<div class="col-lg-12"></div>
-
 					</div>
 				</div>
 			</div>
