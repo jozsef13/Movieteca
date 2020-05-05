@@ -77,19 +77,18 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 	<nav class="site-navigation text-right text-md-center"
 		role="navigation">
 	<div class="container">
-		<ul class="site-menu js-clone-nav d-none d-md-block">
-			<li class="nav-item"><a href="/">Home</a></li>
-			<li class="nav-item"><a href="/movies">Movies</a></li>
-			<li class="nav-item"><a href="/contact">Contact</a></li>
-			<li
-				class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-				<form action="" class="site-block-top-search">
-					<span class="icon icon-search2"></span> <input type="text"
-						class="form-control border-0" placeholder="Search">
-				</form>
-			</li>
-		</ul>
-	</div>
+			<ul class="site-menu js-clone-nav d-none d-md-block">
+				<li class="nav-item"><a href="/">Home</a></li>
+				<li class="nav-item"><a href="/movies">Movies</a></li>
+				<li class="nav-item"><a href="/contact">Contact</a></li>
+				<li class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+					<form action="/movies/search" class="site-block-top-search">
+						<span class="icon icon-search2"></span> 
+						<input type="text" class="form-control border-0" placeholder="Search.." name="nameString">
+					</form>
+				</li>
+			</ul>
+		</div>
 	</nav> </header>
 
 		<div class="bg-light py-3">
@@ -274,9 +273,6 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 									</div>
 								</div>
 							</div>
-
-
-
 						</div>
 						<div class="row" data-aos="fade-up">
 							<div class="col-md-12 text-center">

@@ -1,5 +1,7 @@
 package com.project.module;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -22,7 +24,7 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private double totalPrice;
-	private String shippingDate;
+	private String shippingDate = dateTime();
 	private OrderStatus status;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customerId", nullable = true)
@@ -31,6 +33,13 @@ public class Order {
 	@JoinTable(name = "moviesFromOrder", joinColumns = @JoinColumn(name = "orderId"), inverseJoinColumns = @JoinColumn(name = "movieId"))
 	private Set<Movie> orederedMovies = new LinkedHashSet<Movie>();
 
+	private String dateTime() {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate local = LocalDate.now();
+		LocalDate shipDay = local.plusDays(3);
+		return dtf.format(shipDay);
+	}
+	
 	public Customer getCustomer() {
 		return customer;
 	}

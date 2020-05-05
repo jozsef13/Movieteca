@@ -111,6 +111,7 @@ public class MovieController {
 		if (cart != null) {
 			model.addObject(cart);
 		}
+    
 		return model;
 	}
 }

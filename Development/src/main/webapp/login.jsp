@@ -79,11 +79,10 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 				<li class="nav-item"><a href="/">Home</a></li>
 				<li class="nav-item"><a href="/movies">Movies</a></li>
 				<li class="nav-item"><a href="/contact">Contact</a></li>
-				<li
-					class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-					<form action="" class="site-block-top-search">
-						<span class="icon icon-search2"></span> <input type="text"
-							class="form-control border-0" placeholder="Search">
+				<li class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+					<form action="/movies/search" class="site-block-top-search">
+						<span class="icon icon-search2"></span> 
+						<input type="text" class="form-control border-0" placeholder="Search.." name="nameString">
 					</form>
 				</li>
 			</ul>
@@ -93,7 +92,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 mb-0">
-						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Login</strong>
+						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+							class="text-black">Login</strong>
 					</div>
 				</div>
 			</div>
@@ -144,20 +144,18 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 								<br>
 
 								<div class="col-lg-13">
-									<a href="/signup.jsp" class="btn btn-primary btn-lg btn-block">Don't
-										have an account?</a>
+									<input type="submit" class="btn btn-primary btn-lg btn-block"
+										value="LOG IN! ">
 								</div>
 
 							</div>
 						</form>
 					</div>
 					<div class="col-md-5 ml-auto">
-						<br> <br> <br>
-						<div class="col-lg-12">
-							<input type="submit" class="btn btn-primary btn-lg btn-block"
-								value="LOG IN! ">
-						</div>
-
+						<br> <br> <br> <a href="/signup.jsp"
+							class="btn btn-primary btn-lg btn-block">Don't have an
+							account?</a>
+						<div class="col-lg-12"></div>
 					</div>
 				</div>
 			</div>

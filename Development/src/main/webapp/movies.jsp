@@ -81,9 +81,10 @@
 				<li class="nav-item"><a href="/contact">Contact</a></li>
 				<li
 					class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-					<form action="" class="site-block-top-search">
+					<form action="/movies/search" class="site-block-top-search">
 						<span class="icon icon-search2"></span> <input type="text"
-							class="form-control border-0" placeholder="Search">
+							class="form-control border-0" placeholder="Search.."
+							name="nameString">
 					</form>
 				</li>
 			</ul>
@@ -203,11 +204,22 @@
 							<div class="col-md-12 text-center">
 								<div class="site-block-27">
 									<ul>
-										<li><a href="#">&lt;</a></li>
-										<li class="active"><span>1</span></li>
-										<li><a href="#">2</a></li>
-										<li><a href="#">3</a></li>
-										<li><a href="#">&gt;</a></li>
+										<c:if test="${currentPage != 1 }">
+											<li><a href="/movies/?page=${currentPage-1}">&lt;</a></li>
+										</c:if>
+										<c:forEach begin="1" end="${noOfPages}" var="i">
+											<c:choose>
+												<c:when test="${currentPage eq i }">
+													<li class="active"><span>${i}</span></li>
+												</c:when>
+												<c:otherwise>
+													<li><a href="/movies?page=${i}">${i}</a></li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										<c:if test="${currentPage lt noOfPages }">
+											<li><a href="/movies/?page=${currentPage+1}">&gt;</a></li>
+										</c:if>
 									</ul>
 								</div>
 							</div>
@@ -229,7 +241,11 @@
 							<div class="mb-4">
 								<form action="/movies/byPrice">
 									<h3 class="mb-3 h6 text-uppercase text-black d-block">Filter
-										by Price</h3>
+										by</h3>
+									<select id="priceType" name="priceType">
+										<option value="buyPrice">Buy price</option>
+										<option value="rentPrice">Rent price</option>
+									</select> <br>
 									<div class="ui-grid-a">
 										<div data-role="fieldcontain" class="ui-hide-label ui-block a">
 											<input type="text" name="minPrice" id="minPrice"
@@ -249,47 +265,48 @@
 								<form action="/movies/genre">
 									<h3 class="mb-3 h6 text-uppercase text-black d-block">Genre</h3>
 									<label for="s_sm" class="d-flex"> <input
-										type="checkbox" name="genre" value="Action" class="mr-2 mt-1"> <span
-										class="text-black">Action</span>
+										type="checkbox" name="genre" value="Action" class="mr-2 mt-1">
+										<span class="text-black">Action</span>
 									</label> <label for="s_md" class="d-flex"> <input
-										type="checkbox" name="genre" value="Adventure" class="mr-2 mt-1"> <span
-										class="text-black">Adventure</span>
+										type="checkbox" name="genre" value="Adventure"
+										class="mr-2 mt-1"> <span class="text-black">Adventure</span>
+									</label><label for="s_sm" class="d-flex"> <input
+										type="checkbox" name="genre" value="Animation"
+										class="mr-2 mt-1"> <span class="text-black">Animation</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Comedy" class="mr-2 mt-1"> <span
-										class="text-black">Comedy</span>
+										type="checkbox" name="genre" value="Comedy" class="mr-2 mt-1">
+										<span class="text-black">Comedy</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Crime" class="mr-2 mt-1"> <span
-										class="text-black">Crime</span>
+										type="checkbox" name="genre" value="Crime" class="mr-2 mt-1">
+										<span class="text-black">Crime</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Drama" class="mr-2 mt-1"> <span
-										class="text-black">Drama</span>
+										type="checkbox" name="genre" value="Drama" class="mr-2 mt-1">
+										<span class="text-black">Drama</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Fantasy" class="mr-2 mt-1"> <span
-										class="text-black">Fantasy</span>
+										type="checkbox" name="genre" value="Fantasy" class="mr-2 mt-1">
+										<span class="text-black">Fantasy</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Historical" class="mr-2 mt-1"> <span
-										class="text-black">Historical</span>
+										type="checkbox" name="genre" value="Historical"
+										class="mr-2 mt-1"> <span class="text-black">Historical</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Horro" class="mr-2 mt-1"> <span
-										class="text-black">Horror</span>
+										type="checkbox" name="genre" value="Horro" class="mr-2 mt-1">
+										<span class="text-black">Horror</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Mystery" class="mr-2 mt-1"> <span
-										class="text-black">Mystery</span>
+										type="checkbox" name="genre" value="Mystery" class="mr-2 mt-1">
+										<span class="text-black">Mystery</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Political" class="mr-2 mt-1"> <span
-										class="text-black">Political</span>
+										type="checkbox" name="genre" value="Political"
+										class="mr-2 mt-1"> <span class="text-black">Political</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Romance" class="mr-2 mt-1"> <span
-										class="text-black">Romance</span>
+										type="checkbox" name="genre" value="Romance" class="mr-2 mt-1">
+										<span class="text-black">Romance</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Sci-fi" class="mr-2 mt-1"> <span
-										class="text-black">Science fiction</span>
+										type="checkbox" name="genre" value="Sci-fi" class="mr-2 mt-1">
+										<span class="text-black">Science fiction</span>
 									</label> <label for="s_lg" class="d-flex"> <input
-										type="checkbox" name="genre" value="Thriller" class="mr-2 mt-1"> <span
-										class="text-black">Thriller</span>
-									</label>
-									<br>
-									<input type="submit"
+										type="checkbox" name="genre" value="Thriller"
+										class="mr-2 mt-1"> <span class="text-black">Thriller</span>
+									</label> <br> <input type="submit"
 										class="buy-now btn btn-sm btn-primary" value="Filter">
 								</form>
 							</div>
