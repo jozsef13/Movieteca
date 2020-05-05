@@ -1,7 +1,5 @@
 package com.project.module;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -40,8 +38,6 @@ public class Movie {
 	private double rentPrice;
 	private String imagePath;
 	private String orderType;
-  private int orderQuantity = 0;
-	private String returningDate;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "providerId")
 	private Provider provider;
@@ -51,28 +47,11 @@ public class Movie {
 	private Set<Cart> carts;
 	@ManyToMany(mappedBy = "orederedMovies")
 	private Set<Order> orders;
-	
-	public String getReturningDate() {
-		return returningDate;
-	}
-
-
-
-	public void setReturningDate(String returningDate) {
-		this.returningDate = returningDate;
-	}
-
-	public int getOrderQuantity() {
-		return orderQuantity;
-	}
-	
-	public void setOrderQuantity(int orderQuantity) {
-		this.orderQuantity = orderQuantity;
-	}
 
 	public String getOrderType() {
 		return orderType;
 	}
+
 	public void setOrderType(String orderType) {
 		this.orderType = orderType;
 	}
