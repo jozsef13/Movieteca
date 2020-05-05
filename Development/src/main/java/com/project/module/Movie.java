@@ -1,5 +1,7 @@
 package com.project.module;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,10 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="`movie`")
+@Table(name = "`movie`")
 public class Movie {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
 	private int stock;
@@ -26,16 +28,20 @@ public class Movie {
 	private String mainActors;
 	private String witers;
 	private String directors;
-	private int playTime;
-	private float rating;
-	private float iMDbRating;
+	private String playTime;
+	private double rating;
+	private double iMDbRating;
 	private String description;
 	private String trailerLink;
 	private String releaseDate;
 	private int nrOfReviews;
-	private float averageRating;
-	private float buyPrice;
-	private float rentPrice;
+	private double averageRating;
+	private double buyPrice;
+	private double rentPrice;
+	private String imagePath;
+	private String orderType;
+	private int orderQuantity = 0;
+	private String returningDate;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "providerId")
 	private Provider provider;
@@ -45,20 +51,56 @@ public class Movie {
 	private Set<Cart> carts;
 	@ManyToMany(mappedBy = "orederedMovies")
 	private Set<Order> orders;
+	
+	public String getReturningDate() {
+		return returningDate;
+	}
 
-	public float getBuyPrice() {
+
+
+	public void setReturningDate(String returningDate) {
+		this.returningDate = returningDate;
+	}
+
+
+
+	public int getOrderQuantity() {
+		return orderQuantity;
+	}
+	
+	public void setOrderQuantity(int orderQuantity) {
+		this.orderQuantity = orderQuantity;
+	}
+
+	public String getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public double getBuyPrice() {
 		return buyPrice;
 	}
 
-	public void setBuyPrice(float buyPrice) {
+	public void setBuyPrice(double buyPrice) {
 		this.buyPrice = buyPrice;
 	}
 
-	public float getRentPrice() {
+	public double getRentPrice() {
 		return rentPrice;
 	}
 
-	public void setRentPrice(float rentPrice) {
+	public void setRentPrice(double rentPrice) {
 		this.rentPrice = rentPrice;
 	}
 
@@ -109,7 +151,7 @@ public class Movie {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public int getStock() {
 		return stock;
 	}
@@ -150,27 +192,27 @@ public class Movie {
 		this.directors = directors;
 	}
 
-	public int getPlayTime() {
+	public String getPlayTime() {
 		return playTime;
 	}
 
-	public void setPlayTime(int playTime) {
+	public void setPlayTime(String playTime) {
 		this.playTime = playTime;
 	}
 
-	public float getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(float rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 
-	public float getiMDbRating() {
+	public double getiMDbRating() {
 		return iMDbRating;
 	}
 
-	public void setiMDbRating(float iMDbRating) {
+	public void setiMDbRating(double iMDbRating) {
 		this.iMDbRating = iMDbRating;
 	}
 
@@ -206,11 +248,11 @@ public class Movie {
 		this.nrOfReviews = nrOfReviews;
 	}
 
-	public float getAverageRating() {
+	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(float averageRating) {
+	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
 }

@@ -13,10 +13,10 @@ import javax.persistence.Table;
 @Table(name="`request`")
 public class Request {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String requestType;
-	private String status;
+	private RequestStatus status;
 	private String requestObject;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "adminId", nullable = false)
@@ -57,11 +57,11 @@ public class Request {
 		this.requestType = requestType;
 	}
 
-	public String getStatus() {
+	public RequestStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(RequestStatus status) {
 		this.status = status;
 	}
 
