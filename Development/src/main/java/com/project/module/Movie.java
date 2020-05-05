@@ -62,8 +62,6 @@ public class Movie {
 		this.returningDate = returningDate;
 	}
 
-
-
 	public int getOrderQuantity() {
 		return orderQuantity;
 	}
