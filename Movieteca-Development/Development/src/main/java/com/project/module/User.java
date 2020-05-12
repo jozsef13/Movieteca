@@ -1,24 +1,15 @@
 package com.project.module;
 
-import java.util.Date;
-import java.util.Set;
-
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
-@Entity
-@Table(name = "user")
-@Inheritance(strategy = InheritanceType.JOINED)
+@MappedSuperclass
 public class User {
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String userName;
 	private String firstName;
@@ -26,20 +17,64 @@ public class User {
 	private String email;
 	private String userType;
 	private String sex;
-	private Date birthDate;
-	private String country;
+	private String password;
+	private String birthDate;
+	private String country = "Romania";
+	private String state;
 	private String city;
+	private String address;
 	private String phoneNumber;
-	private String nrOfNewMessages;
-	@OneToMany(mappedBy = "user")
-	private Set<Message> newMessages;
+	private String profilePicture;
+	private boolean active;
+	@Transient
+    private String passwordConfirm;
 
-	public Set<Message> getNewMessages() {
-		return newMessages;
+	public String getState() {
+		return state;
 	}
 
-	public void setNewMessages(Set<Message> newMessages) {
-		this.newMessages = newMessages;
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public int getId() {
@@ -98,11 +133,11 @@ public class User {
 		this.sex = sex;
 	}
 
-	public Date getBirthDate() {
+	public String getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
 
@@ -129,13 +164,4 @@ public class User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
-	public String getNrOfNewMessages() {
-		return nrOfNewMessages;
-	}
-
-	public void setNrOfNewMessages(String nrOfNewMessages) {
-		this.nrOfNewMessages = nrOfNewMessages;
-	}
-
 }

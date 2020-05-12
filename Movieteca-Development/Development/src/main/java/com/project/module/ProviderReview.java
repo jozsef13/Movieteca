@@ -1,22 +1,21 @@
 package com.project.module;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "providerReview")
+@Table(name = "`providerReview`")
 public class ProviderReview extends Review {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-	@ManyToOne
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "providerId", nullable = false)
 	private Provider provider;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "customerId", nullable = false)
+	private Customer customer;
 
 	public Provider getProvider() {
 		return provider;
@@ -26,11 +25,12 @@ public class ProviderReview extends Review {
 		this.provider = provider;
 	}
 
-	public int getId() {
-		return id;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
+
 }

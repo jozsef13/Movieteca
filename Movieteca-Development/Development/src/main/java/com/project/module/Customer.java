@@ -3,43 +3,54 @@ package com.project.module;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "customer")
-
-public class Customer {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-	private int nrMoviesBought;
-	private int nrMoviesRented;
-	private int nrMoviesInCart;
-	private int nrOfReviewsAdded;
-	@OneToMany(mappedBy = "customer")
-	private Set<Review> reviewsAdded;
+@Table(name = "`customer`")
+public class Customer extends User{
+	
+	private int nrMoviesBought = 0;
+	private int nrMoviesRented = 0;
+	private int nrMoviesInCart = 0;
+	private int nrOfReviewsAdded = 0;
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	private Set<ProviderReview> providerReviewsAdded;
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	private Set<MovieReview> movieReviewsAdded;
 	@OneToOne
 	private Cart cart;
-	@OneToMany(mappedBy = "customer")
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
 	private Set<Order> orders;
-
-	public int getId() {
-		return id;
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	private Set<Message> messages;
+	
+	public Set<ProviderReview> getProviderReviewsAdded() {
+		return providerReviewsAdded;
 	}
 
-	public Set<Review> getReviewsAdded() {
-		return reviewsAdded;
+	public void setProviderReviewsAdded(Set<ProviderReview> providerReviewsAdded) {
+		this.providerReviewsAdded = providerReviewsAdded;
 	}
 
-	public void setReviewsAdded(Set<Review> reviewsAdded) {
-		this.reviewsAdded = reviewsAdded;
+	public Set<MovieReview> getMovieReviewsAdded() {
+		return movieReviewsAdded;
 	}
 
+	public void setMovieReviewsAdded(Set<MovieReview> movieReviewsAdded) {
+		this.movieReviewsAdded = movieReviewsAdded;
+	}
+
+	public Set<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Set<Message> newMessages) {
+		this.messages = newMessages;
+	}
+	
 	public Cart getCart() {
 		return cart;
 	}
@@ -56,39 +67,47 @@ public class Customer {
 		this.orders = orders;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public int getNrMoviesBought() {
 		return nrMoviesBought;
 	}
 
-	public void setNrMoviesBought(int nrMoviesBought) {
-		this.nrMoviesBought = nrMoviesBought;
+	public void setNrMoviesBought() {
+		for (Order order : orders) {
+			for (Movie movie : order.getOrederedMovies()) {
+				if(movie.getOrderType().equals("Buy")) {
+					this.nrMoviesBought++;
+				}
+			}
+		}
 	}
 
 	public int getNrMoviesRented() {
 		return nrMoviesRented;
 	}
 
-	public void setNrMoviesRented(int nrMoviesRented) {
-		this.nrMoviesRented = nrMoviesRented;
+	public void setNrMoviesRented() {
+		for (Order order : orders) {
+			for (Movie movie : order.getOrederedMovies()) {
+				if(movie.getOrderType().equals("Rent")) {
+					this.nrMoviesRented++;
+				}
+			}
+		}
 	}
 
 	public int getNrMoviesInCart() {
 		return nrMoviesInCart;
 	}
 
-	public void setNrMoviesInCart(int nrMoviesInCart) {
-		this.nrMoviesInCart = nrMoviesInCart;
+	public void setNrMoviesInCart() {
+		this.nrMoviesInCart = cart.getMoviesInCart().size();
 	}
 
 	public int getNrOfReviewsAdded() {
 		return nrOfReviewsAdded;
 	}
 
-	public void setNrOfReviewsAdded(int nrOfReviewsAdded) {
-		this.nrOfReviewsAdded = nrOfReviewsAdded;
+	public void setNrOfReviewsAdded() {
+		this.nrOfReviewsAdded = providerReviewsAdded.size() + movieReviewsAdded.size();
 	}
 }

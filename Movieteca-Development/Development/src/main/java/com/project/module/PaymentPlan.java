@@ -2,6 +2,7 @@ package com.project.module;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,15 +11,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "paymentPlan")
-
+@Table(name="`paymentPlan`")
 public class PaymentPlan {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String planType;
-	private float price;
-	@OneToMany(mappedBy = "paymentPlan")
+	private PlanType planType;
+	private double price;
+	@OneToMany(mappedBy = "paymentPlan", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Provider> providers;
 
 	public int getId() {
@@ -37,19 +37,19 @@ public class PaymentPlan {
 		this.providers = providers;
 	}
 
-	public String getPlanType() {
+	public PlanType getPlanType() {
 		return planType;
 	}
 
-	public void setPlanType(String planType) {
+	public void setPlanType(PlanType planType) {
 		this.planType = planType;
 	}
 
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 }
