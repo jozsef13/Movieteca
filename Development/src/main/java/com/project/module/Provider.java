@@ -1,5 +1,7 @@
 package com.project.module;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -29,6 +31,49 @@ public class Provider extends User {
 	private PaymentPlan paymentPlan;
 	@OneToMany(mappedBy = "provider")
 	private Set<Message> messages;
+
+	
+	
+	public Provider(int nrMoviesSold, int nrMoviesRented, int nrActivePosts, double averageRating, int nrOfReviews,
+			int nrRequestSent, Set<Request> requestsSent, Set<ProviderReview> receivedReviews, Set<Movie> moviesPosted,
+			PaymentPlan paymentPlan, Set<Message> messages, User user) {
+		super(user);
+		this.nrMoviesSold = nrMoviesSold;
+		this.nrMoviesRented = nrMoviesRented;
+		this.nrActivePosts = nrActivePosts;
+		this.averageRating = averageRating;
+		this.nrOfReviews = nrOfReviews;
+		this.nrRequestSent = nrRequestSent;
+		this.requestsSent = requestsSent;
+		this.receivedReviews = receivedReviews;
+		this.moviesPosted = moviesPosted;
+		this.paymentPlan = paymentPlan;
+		this.messages = messages;
+	}
+	
+	public Movie getMoviePostedById(int id) {
+        Movie returnMovie = new Movie();
+
+        for (Movie movie : moviesPosted) {
+            if(movie.getId() == id) {
+                returnMovie = movie;
+                break;
+            }
+        }
+
+        return returnMovie;
+    }
+
+    public List<Request> getRequestsByStatus(RequestStatus status){
+        List<Request> returnRequests = new ArrayList<Request>();
+        for (Request request : requestsSent) {
+            if(request.getStatus().equals(status)) {
+                returnRequests.add(request);
+            }
+        }
+
+        return returnRequests;
+    }
 
 	public Set<ProviderReview> getReceivedReviews() {
 		return receivedReviews;

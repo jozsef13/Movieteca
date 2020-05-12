@@ -25,6 +25,23 @@ public class Request {
 	@JoinColumn(name = "providerId", nullable=false)
 	private Provider provider;
 
+	
+	
+	public Request(int id, String requestType, RequestStatus status, String requestObject, Admin admin,
+			Provider provider) {
+		super();
+		this.id = id;
+		this.requestType = requestType;
+		this.status = status;
+		this.requestObject = requestObject;
+		this.admin = admin;
+		this.provider = provider;
+	}
+	
+	public Request() {
+		
+	}
+
 	public int getId() {
 		return id;
 	}
