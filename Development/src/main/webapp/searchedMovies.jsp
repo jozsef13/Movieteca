@@ -132,8 +132,8 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 mb-0">
-						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
-							class="text-black">Movies</strong>
+						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <a href="/movies">Movies</a> <span class="mx-2 mb-0">/</span> <strong
+							class="text-black">Search: <c:out value="${searchString }" /></strong>
 					</div>
 				</div>
 			</div>
@@ -147,9 +147,6 @@
 
 						<div class="row">
 							<div class="col-md-12 mb-5">
-								<div class="float-md-left mb-4">
-									<h2 class="text-black h5">All our collection</h2>
-								</div>
 								<div class="d-flex">
 									<div class="dropdown mr-1 ml-md-auto">
 										<button type="button"
@@ -178,17 +175,17 @@
 											<c:set var="orderTypeRB" scope="session"
 												value="RentPriceDescending" />
 											<a class="dropdown-item"
-												href="/movies?sortType=<c:out value = "${orderTypeA}"/>">Name,
-												A to Z</a> <a class="dropdown-item"
-												href="/movies?sortType=<c:out value = "${orderTypeZ}"/>">Name,
-												Z to A</a> <a class="dropdown-item"
-												href="/movies?sortType=<c:out value = "${orderTypeBA}"/>">Buy
+												href="/movies/<c:out value = "${orderTypeA}"/>">Name, A
+												to Z</a> <a class="dropdown-item"
+												href="/movies/<c:out value = "${orderTypeZ}"/>">Name, Z
+												to A</a> <a class="dropdown-item"
+												href="/movies/<c:out value = "${orderTypeBA}"/>">Buy
 												Price, Ascending</a> <a class="dropdown-item"
-												href="/movies?sortType=<c:out value = "${orderTypeBD}"/>">Buy
+												href="/movies/<c:out value = "${orderTypeBD}"/>">Buy
 												Price, Descending</a> <a class="dropdown-item"
-												href="/movies?sortType=<c:out value = "${orderTypeRA}"/>">Rent
+												href="/movies/<c:out value = "${orderTypeRA}"/>">Rent
 												Price, Ascending</a> <a class="dropdown-item"
-												href="/movies?sortType=<c:out value = "${orderTypeRB}"/>">Rent
+												href="/movies/<c:out value = "${orderTypeRB}"/>">Rent
 												Price, Descending</a>
 											<div class="dropdown-divider"></div>
 											<a class="dropdown-item" href="#">Most bought</a> <a
@@ -226,23 +223,20 @@
 											<p>
 												<c:choose>
 													<c:when test="${movie.stock > 10 }">
-														<p class="d-flex color-item align-items-center">
-															<span
-																class="bg-success color d-inline-block rounded-circle mr-2"></span>
+														<p class="d-flex color-item align-items-center"> <span
+															class="bg-success color d-inline-block rounded-circle mr-2"></span>
 															<span class="text-black">On stock</span>
 														</p>
 													</c:when>
 													<c:when test="${movie.stock <= 10 and movie.stock > 0 }">
 														<p class="d-flex color-item align-items-center">
-															<span
-																class="bg-warning color d-inline-block rounded-circle mr-2"></span>
+															<span class="bg-warning color d-inline-block rounded-circle mr-2"></span>
 															<span class="text-black">Few left</span>
 														</p>
 													</c:when>
 													<c:when test="${movie.stock eq 0 }">
 														<p class="d-flex color-item align-items-center">
-															<span
-																class="bg-danger color d-inline-block rounded-circle mr-2"></span>
+															<span class="bg-danger color d-inline-block rounded-circle mr-2"></span>
 															<span class="text-black">Not on stock</span>
 														</p>
 													</c:when>
@@ -251,8 +245,7 @@
 											<p>
 												<c:choose>
 													<c:when test="${movie.stock > 0 }">
-														<form
-															action="/addToCart/Movie/<c:out value="${movie.id}" />">
+														<form action="/addToCart/Movie/<c:out value="${movie.id}" />">
 															<input type="radio" name="orderType" value="Rent">
 															<label for="male">Rent</label> <input type="radio"
 																name="orderType" value="Buy"> <label
@@ -261,14 +254,12 @@
 														</form>
 													</c:when>
 													<c:when test="${movie.stock <= 0 }">
-														<form
-															action="/addToCart/Movie/<c:out value="${movie.id}" />">
-															<input type="radio" name="orderType" value="Rent"
-																disabled> <label for="male">Rent</label> <input
-																type="radio" name="orderType" value="Buy" disabled>
-															<label for="female">Buy</label> <br> <input
-																type="submit" name="Add to Cart" value="Add to Cart"
-																disabled>
+														<form action="/addToCart/Movie/<c:out value="${movie.id}" />">
+															<input type="radio" name="orderType" value="Rent" disabled>
+															<label for="male">Rent</label> <input type="radio"
+																name="orderType" value="Buy" disabled> <label
+																for="female">Buy</label> <br> <input type="submit"
+																name="Add to Cart" value="Add to Cart" disabled>
 														</form>
 													</c:when>
 												</c:choose>
@@ -282,43 +273,21 @@
 							<div class="col-md-12 text-center">
 								<div class="site-block-27">
 									<ul>
-										<c:if test="${empty sortTypeName }">
-											<c:if test="${currentPage != 1 }">
-												<li><a href="/movies?page=${currentPage-1}">&lt;</a></li>
-											</c:if>
-
-											<c:forEach begin="1" end="${noOfPages}" var="i">
-												<c:choose>
-													<c:when test="${currentPage eq i }">
-														<li class="active"><span>${i}</span></li>
-													</c:when>
-													<c:otherwise>
-														<li><a href="/movies?page=${i}">${i}</a></li>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach>
-											<c:if test="${currentPage lt noOfPages }">
-												<li><a href="/movies?page=${currentPage+1}">&gt;</a></li>
-											</c:if>
+										<c:if test="${currentPage != 1 }">
+											<li><a href="/movies/search?nameString=<c:out value="${searchString}"/>&page=${currentPage-1}">&lt;</a></li>
 										</c:if>
-										<c:if test="${not empty sortTypeName }">
-											<c:if test="${currentPage != 1 }">
-												<li><a href="/movies?page=${currentPage-1}&sortType=<c:out value = "${sortTypeName}"/>">&lt;</a></li>
-											</c:if>
-
-											<c:forEach begin="1" end="${noOfPages}" var="i">
-												<c:choose>
-													<c:when test="${currentPage eq i }">
-														<li class="active"><span>${i}</span></li>
-													</c:when>
-													<c:otherwise>
-														<li><a href="/movies?page=${i}&sortType=<c:out value = "${sortTypeName}"/>">${i}</a></li>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach>
-											<c:if test="${currentPage lt noOfPages }">
-												<li><a href="/movies?page=${currentPage+1}&sortType=<c:out value = "${sortTypeName}"/>">&gt;</a></li>
-											</c:if>
+										<c:forEach begin="1" end="${noOfPages}" var="i">
+											<c:choose>
+												<c:when test="${currentPage eq i }">
+													<li class="active"><span>${i}</span></li>
+												</c:when>
+												<c:otherwise>
+													<li><a href="/movies/search?nameString=<c:out value="${searchString}"/>&page=${i}">${i}</a></li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										<c:if test="${currentPage lt noOfPages }">
+											<li><a href="/movies/search?nameString=<c:out value="${searchString}"/>&page=${currentPage+1}">&gt;</a></li>
 										</c:if>
 									</ul>
 								</div>

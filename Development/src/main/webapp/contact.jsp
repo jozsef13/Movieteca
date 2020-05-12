@@ -3,6 +3,8 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@
 taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="security"
+	uri="http://www.springframework.org/security/tags"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -43,47 +45,83 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 					</div>
 				</div>
 
-				<div class="col-6 col-md-4 order-3 order-md-3 text-right">
+				<div class="col-7 col-md-7 order-3 order-md-3 text-right">
 					<div class="site-top-icons">
 						<ul>
-							<li><a href="/myaccount.jsp"><span class="icon icon-person"></span></a></li>
-							<li><a href="#"><span class="icon icon-heart-o"></span></a></li>
-							<li><a href="/cart/<c:out value = "${cart.id}" />"
-								class="site-cart"> <span class="icon icon-shopping_cart"></span>
-								<span class="count"> 
-									<c:choose>
-										<c:when test="${empty cart}">
-											0
-										</c:when>
-										<c:otherwise>
-											<c:out value="${cart.moviesInCart.size()}" />
-										</c:otherwise>
-									</c:choose>
-								</span>
-							</a></li>
+							<security:authorize access="hasAnyRole('Customer')">
+									<security:authentication property="principal.user.cart"
+										var="cart" />
+									<li><c:choose>
+											<c:when test="${empty cart}">
+											<a href="#" class="site-cart">
+												<button class="btn btn-secondary btn-sm site-cart">
+													<span class="icon icon-shopping_cart"></span> <span
+														class="count"> 0 </span>
+												</button>
+												</a>
+											</c:when>
+											<c:when test="${not empty cart}">
+												<a href="/cart/<c:out value = "${cart.id}" />"
+													class="site-cart">
+													<button class="btn btn-secondary btn-sm">
+														<span class="icon icon-shopping_cart"></span> <span
+															class="count"> <c:out
+																value="${cart.moviesInCart.size()}" />
+														</span>
+													</button>
+												</a>
+											</c:when>
+										</c:choose></li>
+								</security:authorize>
+							<li>
+								<div class="btn-group">
+										<button class="btn btn-secondary btn-sm"
+											onclick="myFunction()" type="button">
+											<span class="icon icon-person"></span>
+										</button>
+										<button type="button"
+											class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
+											<span class="sr-only">Toggle Dropdown</span>
+										</button>
+
+										<security:authorize access="!isAuthenticated()">
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="/login">Login</a> <a
+													class="dropdown-item" href="/register">Register</a>
+											</div>
+										</security:authorize>
+										<security:authorize access="isAuthenticated()">
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="/myaccount">My Account</a> 
+												<a class="dropdown-item" href="/logout">Logout</a>
+											</div>
+										</security:authorize>
+									</div>
+							</li>
 							<li class="d-inline-block d-md-none ml-md-0"><a href="#"
 								class="site-menu-toggle js-menu-toggle"><span
 									class="icon-menu"></span></a></li>
 						</ul>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
 
-	<nav class="site-navigation text-right text-md-center"
-		role="navigation">
-	<div class="container">
+	<nav class="site-navigation text-right text-md-center" role="navigation">
+	<div class="container" style="margin-left: 300px">
 		<ul class="site-menu js-clone-nav d-none d-md-block">
 			<li class="nav-item"><a href="/">Home</a></li>
 			<li class="nav-item"><a href="/movies">Movies</a></li>
 			<li class="nav-item"><a href="/contact">Contact</a></li>
 			<li
 				class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-				<form action="" class="site-block-top-search">
+				<form action="/movies/search" class="site-block-top-search">
 					<span class="icon icon-search2"></span> <input type="text"
-						class="form-control border-0" placeholder="Search">
+						class="form-control border-0" placeholder="Search.."
+						name="nameString">
 				</form>
 			</li>
 		</ul>
@@ -173,6 +211,10 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 	<script src="/js/aos.js"></script>
 
 	<script src="/js/main.js"></script>
-
+<script>
+		function myFunction() {
+			location.href = "/myaccount"
+		};
+	</script>
 </body>
 </html>

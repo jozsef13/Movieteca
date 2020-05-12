@@ -18,10 +18,10 @@ public class Request {
 	private String requestType;
 	private RequestStatus status;
 	private String requestObject;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "adminId", nullable = false)
 	private Admin admin;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "providerId", nullable=false)
 	private Provider provider;
 

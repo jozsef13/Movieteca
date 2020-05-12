@@ -12,12 +12,12 @@ import javax.persistence.Table;
 @Table(name = "`provider`")
 public class Provider extends User {
 
-	private int nrMoviesSold;
-	private int nrMoviesRented;
-	private int nrActivePosts;
-	private double averageRating;
-	private int nrOfReviews;
-	private int nrRequestSent;
+	private int nrMoviesSold = 0;
+	private int nrMoviesRented = 0;
+	private int nrActivePosts = 0;
+	private double averageRating = 0;
+	private int nrOfReviews = 0;
+	private int nrRequestSent = 0;
 	@OneToMany(mappedBy = "provider")
 	private Set<Request> requestsSent;
 	@OneToMany(mappedBy = "provider")
@@ -82,32 +82,40 @@ public class Provider extends User {
 		return nrActivePosts;
 	}
 
-	public void setNrActivePosts(int nrActivePosts) {
-		this.nrActivePosts = nrActivePosts;
+	public void setNrActivePosts() {
+		for (Movie movie : moviesPosted) {
+			if(movie.getStock() > 0) {
+				nrActivePosts++;
+			}
+		}
 	}
 
 	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(double averageRating) {
-		this.averageRating = averageRating;
+	public void setAverageRating() {
+		double sum = 0;
+		for (ProviderReview review : receivedReviews) {
+			sum  += review.getRating();
+		}
+		this.averageRating = sum/receivedReviews.size();
 	}
 
 	public int getNrOfReviews() {
 		return nrOfReviews;
 	}
 
-	public void setNrOfReviews(int nrOfReviews) {
-		this.nrOfReviews = nrOfReviews;
+	public void setNrOfReviews() {
+		this.nrOfReviews = receivedReviews.size();
 	}
 
 	public int getNrRequestSent() {
 		return nrRequestSent;
 	}
 
-	public void setNrRequestSent(int nrRequestSent) {
-		this.nrRequestSent = nrRequestSent;
+	public void setNrRequestSent() {
+		this.nrRequestSent = requestsSent.size();
 	}
 
 	public Set<Message> getMessages() {

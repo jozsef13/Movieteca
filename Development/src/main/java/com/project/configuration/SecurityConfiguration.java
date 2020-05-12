@@ -1,44 +1,66 @@
 package com.project.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.project.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-				.withUser("user")
-				.password("test123")
-				.roles("USER")
-				.and()
-				.withUser("admin")
-				.password("admin")
-				.roles("ADMIN");
-	}
+	@Autowired
+	private UserService userDetailsService;
 
 	@Bean
-	public PasswordEncoder getPasswordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+    public AuthenticationManager customAuthenticationManager() throws Exception {
+        return authenticationManager();
+    }
+
+	@Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    }
+	
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/css/**", "/js/**", "/images/**", "/images/**", "/scss/**").permitAll()
+		http.csrf().disable()
+				.authorizeRequests()
+				.antMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**").permitAll()
 				.antMatchers("/").permitAll()
 				.antMatchers("/movies/**").permitAll()
 				.antMatchers("/movie/*").permitAll()
 				.antMatchers("/signup").permitAll()
-				.antMatchers("/**").permitAll()
-				.and().formLogin().loginPage("/login").permitAll();
+				.antMatchers("/register").permitAll()
+				.antMatchers("/addMovie").hasAnyRole("Provider", "Admin")
+				.antMatchers("/editmovie.jsp").hasAnyRole("Provider", "Admin")
+				.antMatchers("/contact").hasAnyRole("Provider", "Customer", "Admin")
+				.antMatchers("/cart/**").hasAnyRole("Customer", "Admin")
+				.antMatchers("/order/**").hasAnyRole("Customer", "Admin")
+				.antMatchers("/addToCart/**").hasRole("Customer")
+				.antMatchers("/myaccount").authenticated()
+				.and()
+					.formLogin()
+					.loginPage("/login")
+					.defaultSuccessUrl("/")
+					.failureUrl("/login?error=true")
+					.permitAll()
+				.and()
+					.logout()
+					.logoutSuccessUrl("/login?logout=true")
+					.invalidateHttpSession(true)
+					.permitAll();
 	}
 }

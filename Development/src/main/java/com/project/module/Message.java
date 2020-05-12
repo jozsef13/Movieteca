@@ -17,23 +17,12 @@ public class Message {
 	private int id;
 	private String textMessage;
 	private String messageType;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "adminId", nullable = false)
-	private Admin admin;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "costumerId", nullable = false)
 	private Customer customer;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "providerId", nullable = false)
 	private Provider provider;
-
-	public Admin getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(Admin admin) {
-		this.admin = admin;
-	}
 
 	public Customer getCustomer() {
 		return customer;

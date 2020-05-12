@@ -3,6 +3,7 @@ package com.project.module;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -11,21 +12,21 @@ import javax.persistence.Table;
 @Table(name = "`customer`")
 public class Customer extends User{
 	
-	private int nrMoviesBought;
-	private int nrMoviesRented;
-	private int nrMoviesInCart;
-	private int nrOfReviewsAdded;
-	@OneToMany(mappedBy = "customer")
+	private int nrMoviesBought = 0;
+	private int nrMoviesRented = 0;
+	private int nrMoviesInCart = 0;
+	private int nrOfReviewsAdded = 0;
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
 	private Set<ProviderReview> providerReviewsAdded;
-	@OneToMany(mappedBy = "customer")
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
 	private Set<MovieReview> movieReviewsAdded;
 	@OneToOne
 	private Cart cart;
-	@OneToMany(mappedBy = "customer")
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
 	private Set<Order> orders;
-	@OneToMany(mappedBy = "customer")
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
 	private Set<Message> messages;
-
+	
 	public Set<ProviderReview> getProviderReviewsAdded() {
 		return providerReviewsAdded;
 	}
@@ -70,31 +71,43 @@ public class Customer extends User{
 		return nrMoviesBought;
 	}
 
-	public void setNrMoviesBought(int nrMoviesBought) {
-		this.nrMoviesBought = nrMoviesBought;
+	public void setNrMoviesBought() {
+		for (Order order : orders) {
+			for (Movie movie : order.getOrederedMovies()) {
+				if(movie.getOrderType().equals("Buy")) {
+					this.nrMoviesBought++;
+				}
+			}
+		}
 	}
 
 	public int getNrMoviesRented() {
 		return nrMoviesRented;
 	}
 
-	public void setNrMoviesRented(int nrMoviesRented) {
-		this.nrMoviesRented = nrMoviesRented;
+	public void setNrMoviesRented() {
+		for (Order order : orders) {
+			for (Movie movie : order.getOrederedMovies()) {
+				if(movie.getOrderType().equals("Rent")) {
+					this.nrMoviesRented++;
+				}
+			}
+		}
 	}
 
 	public int getNrMoviesInCart() {
 		return nrMoviesInCart;
 	}
 
-	public void setNrMoviesInCart(int nrMoviesInCart) {
-		this.nrMoviesInCart = nrMoviesInCart;
+	public void setNrMoviesInCart() {
+		this.nrMoviesInCart = cart.getMoviesInCart().size();
 	}
 
 	public int getNrOfReviewsAdded() {
 		return nrOfReviewsAdded;
 	}
 
-	public void setNrOfReviewsAdded(int nrOfReviewsAdded) {
-		this.nrOfReviewsAdded = nrOfReviewsAdded;
+	public void setNrOfReviewsAdded() {
+		this.nrOfReviewsAdded = providerReviewsAdded.size() + movieReviewsAdded.size();
 	}
 }

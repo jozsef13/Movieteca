@@ -33,6 +33,7 @@ public class OrderService {
 		movieRepository.saveAll(order.getOrederedMovies());
 		order.setStatus(OrderStatus.Placed);
 		order.setTotalPrice(cart.getTotalPrice());
+		order.setCustomer(cart.getCustomer());
 		orderRepository.save(order);
 		return order;
 	}
@@ -45,7 +46,16 @@ public class OrderService {
 	}
 
 	public Order getOrderById(int id) {
-		return orderRepository.getOne(id);
+		Order order = orderRepository.getOne(id);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyy");
+		LocalDate today = LocalDate.now();
+		String todayString = dtf.format(today);
+		if(order.getShippingDate().compareTo(todayString) == 1) {
+			order.setStatus(OrderStatus.Sent);
+		} else if(order.getShippingDate().compareTo(todayString) <= 0) {
+			order.setStatus(OrderStatus.Delivered);
+		}
+		orderRepository.save(order);
+		return order;
 	}
-
 }

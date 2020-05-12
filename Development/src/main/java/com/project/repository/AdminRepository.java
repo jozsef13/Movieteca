@@ -8,4 +8,8 @@ import com.project.module.Admin;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
+	Admin findByUserName(String userName);
+
+	Admin findByEmail(String email);
+
 }

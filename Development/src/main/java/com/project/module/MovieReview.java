@@ -10,10 +10,10 @@ import javax.persistence.Table;
 @Table(name = "`movieReview`")
 public class MovieReview extends Review {
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "movieId", nullable = false)
 	private Movie movie;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "customerId", nullable = false)
 	private Customer customer;
 

@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 @MappedSuperclass
 public class User {
@@ -18,10 +19,55 @@ public class User {
 	private String sex;
 	private String password;
 	private String birthDate;
-	private String country;
+	private String country = "Romania";
+	private String state;
 	private String city;
+	private String address;
 	private String phoneNumber;
-	private String nrOfNewMessages;
+	private String profilePicture;
+	private boolean active;
+	@Transient
+    private String passwordConfirm;
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public String getPassword() {
 		return password;
@@ -118,13 +164,4 @@ public class User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
-	public String getNrOfNewMessages() {
-		return nrOfNewMessages;
-	}
-
-	public void setNrOfNewMessages(String nrOfNewMessages) {
-		this.nrOfNewMessages = nrOfNewMessages;
-	}
-
 }

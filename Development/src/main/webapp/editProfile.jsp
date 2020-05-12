@@ -13,6 +13,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
 
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
@@ -31,6 +32,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 </head>
 <body>
+
 	<div class="site-wrap">
 		<header class="site-navbar" role="banner">
 		<div class="site-navbar-top">
@@ -52,11 +54,11 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 										var="cart" />
 									<li><c:choose>
 											<c:when test="${empty cart}">
-											<a href="#" class="site-cart">
-												<button class="btn btn-secondary btn-sm site-cart">
-													<span class="icon icon-shopping_cart"></span> <span
-														class="count"> 0 </span>
-												</button>
+												<a href="#" class="site-cart">
+													<button class="btn btn-secondary btn-sm site-cart">
+														<span class="icon icon-shopping_cart"></span> <span
+															class="count"> 0 </span>
+													</button>
 												</a>
 											</c:when>
 											<c:when test="${not empty cart}">
@@ -84,13 +86,13 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 											aria-expanded="false">
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
+
 										<security:authorize access="!isAuthenticated()">
 											<div class="dropdown-menu">
 												<a class="dropdown-item" href="/login">Login</a> <a
 													class="dropdown-item" href="/register">Register</a>
 											</div>
 										</security:authorize>
-
 										<security:authorize access="isAuthenticated()">
 											<div class="dropdown-menu">
 												<a class="dropdown-item" href="/myaccount">My Account</a> <a
@@ -128,128 +130,94 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 		</div>
 		</nav> </header>
 
-		<div class="site-blocks-cover"
-			style="background-image: url(images/background.jpg);" data-aos="fade">
+		<div class="bg-light py-3">
 			<div class="container">
-				<div
-					class="row align-items-start align-items-md-center justify-content-end">
-					<div class="col-md-5 text-center text-md-left pt-5 pt-md-0">
-						<h1 style="color: white;">Best Seller</h1>
-						<div class="intro-text text-center text-md-left">
-							<p style="color: white;">Check out our best seller last month
-								at an amazing price. Have your own cinema at home.</p>
-							<p>
-								<a href="/movie/<c:out value = "${movie.id}"/>"
-									class="btn btn-sm btn-primary">Buy now</a>
-							</p>
-						</div>
+				<div class="row">
+					<div class="col-md-12 mb-0">
+						<a href="/myaccount">My Account</a> <span class="mx-2 mb-0">/</span> <strong
+							class="text-black">Edit Profile</strong>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="site-section">
-			<div class="container">
-				<div class="row mb-5">
-					<c:forEach items="${movies}" var="singleMovie">
-						<div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-							<div class="block-4 text-center border">
-								<figure class="block-4-image"> <a
-									href="/movie/<c:out value = "${singleMovie.id}"/>"><img
-									style="width: 500px; height: 300px;"
-									src="<c:out value="${singleMovie.imagePath}" />"
-									alt="Image placeholder" class="img-fluid"></a> </figure>
-								<div class="block-4-text p-4">
-									<h3>
-										<a href="/movie/<c:out value = "${singleMovie.id}"/>"><c:out
-												value="${singleMovie.name}" /></a>
-									</h3>
-									<br>
-									<p align="left">
-										Running time:
-										<c:out value="${singleMovie.playTime}" />
-									</p>
-									<p align="left">
-										Starring:
-										<c:out value="${singleMovie.mainActors}" />
-									</p>
-									<p align="left">
-										Genre:
-										<c:out value="${singleMovie.genre}" />
-									</p>
-									<p align="left" class="mb-0 rated">
-										<span>Rating: </span> <span class="fa fa-star checked"></span>
-										<span class="fa fa-star checked"></span> <span
-											class="fa fa-star checked"></span> <span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
-									</p>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</div>
-			</div>
-
-			<div class="site-section site-section-sm site-blocks-1">
+		<security:authorize access="isAuthenticated()">
+			<div class="site-section">
 				<div class="container">
 					<div class="row">
-						<div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4"
-							data-aos="fade-up" data-aos-delay="">
-							<div class="icon mr-4 align-self-start">
-								<span class="icon-truck"></span>
+						<security:authentication property="principal.user.userType"
+							var="role" />
+						<form action="/user/edit/<c:out value="${role }"/>" method="post" enctype="multipart/form-data">
+								
+							<div class="col-md-12">
+								<u><h2 class="text-black">Account Info</h2></u>
+								Profile picture: <input type="file" class="form-control"
+									id="img" name="img">
+									<br> 
+									<b>Username:</b>
+								<input type="text" class="form-control" name="userName"
+									id="c_username" value="<security:authentication property="principal.username" />" readonly />
+								<br><b>Password: </b><input type="password" class="form-control" name="password" id="c_password" value="<security:authentication property="principal.password"/>"/>
+								<br> <b>Last Name:</b> <input type="text"
+									class="form-control" name="lastName" id="c_lastName" value="<security:authentication property="principal.user.lastName" />"/>
+								
+								<br> <b>First Name:</b> <input type="text"
+									class="form-control" name="firstName" id="c_firstName" value="<security:authentication property="principal.user.firstName" />" />
+								
+								<br> <b>Email:</b> <input type="text" class="form-control"
+									name="email" id="c_email" readonly value="<security:authentication property="principal.user.email" />"/>
+								
+								<br> <b>Birthdate:</b> <input type="date"
+									class="form-control" name="birthDate" id="c_bDay" value="<security:authentication property="principal.user.birthDate" />">
+								
+								<br> <b>Location:</b>
+								<div class="col-md-12">
+									<input type="text" class="form-control" name="city"
+										id="c_city" value="<security:authentication property="principal.user.city" />"/>
+									
+								</div>
+								<div class="col-md-12">
+									<input type="text" class="form-control" name="state"
+										id="c_state" value="<security:authentication property="principal.user.state" />"/>
+									
+								</div>
+								<div class="col-md-12">
+									<input type="text" class="form-control" name="country" id="c_country" value="<security:authentication property="principal.user.country" />" readonly/>
+									
+								</div>
+								<br> <b>Address:</b> <input type="text"
+									class="form-control" name="address" id="c_address"  value="<security:authentication property="principal.user.address" />"/>
+								
+								<br> <b>Phone Number:</b> <input type="text"
+									class="form-control" name="phoneNumber" id="c_phoneNumber" value="<security:authentication property="principal.user.phoneNumber" />"/>
+								
+								<br> <b>Gender:</b> <input type="text" class="form-control"
+									name="sex" id="c_sex" readonly value="<security:authentication property="principal.user.sex" />"/>
+								
+								<br> <input type="submit" value="Submit"
+								class="buy-now btn btn-sm btn-primary">
 							</div>
-							<div class="text">
-								<h2 class="text-uppercase">Free Shipping</h2>
-								<p>You can benefit for free shipping for a short period of
-									time. Grab a movie and lay back. We'll deliver it to you for
-									free.</p>
-							</div>
-						</div>
-						<div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4"
-							data-aos="fade-up" data-aos-delay="100">
-							<div class="icon mr-4 align-self-start">
-								<span class="icon-refresh2"></span>
-							</div>
-							<div class="text">
-								<h2 class="text-uppercase">Free Returns</h2>
-								<p>If you don't feel like you want that movie anymore, you
-									can return it for free. Keep in mind that the product must be
-									sealed and not damaged.</p>
-							</div>
-						</div>
-						<div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4"
-							data-aos="fade-up" data-aos-delay="200">
-							<div class="icon mr-4 align-self-start">
-								<span class="icon-help"></span>
-							</div>
-							<div class="text">
-								<h2 class="text-uppercase">Customer Support</h2>
-								<p>We are here for you! Do you have any question about
-									buying or renting from us? Don't hesitate to contact us at our
-									contact page.</p>
-							</div>
-						</div>
+							
+						</form>
 					</div>
 				</div>
-			</div>
-
+				</div>
+		</security:authorize>
 		</div>
-	</div>
 
+		<script src="/js/jquery-3.3.1.min.js"></script>
+		<script src="/js/jquery-ui.js"></script>
+		<script src="/js/popper.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/owl.carousel.min.js"></script>
+		<script src="/js/jquery.magnific-popup.min.js"></script>
+		<script src="/js/aos.js"></script>
 
-	<script src="/js/jquery-3.3.1.min.js"></script>
-	<script src="/js/jquery-ui.js"></script>
-	<script src="/js/popper.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/owl.carousel.min.js"></script>
-	<script src="/js/jquery.magnific-popup.min.js"></script>
-	<script src="/js/aos.js"></script>
+		<script src="/js/main.js"></script>
 
-	<script src="/js/main.js"></script>
-	<script>
-		function myFunction() {
-			location.href = "/myaccount"
-		};
-	</script>
+		<script>
+			function myFunction() {
+				location.href = "/myaccount"
+			};
+		</script>
 </body>
 </html>

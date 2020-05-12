@@ -10,11 +10,9 @@ import javax.persistence.Table;
 @Table(name = "`admin`")
 public class Admin extends User {
 	
-	private int numberOfRequests;
+	private int numberOfRequests = 0;
 	@OneToMany(mappedBy = "admin")
 	private Set<Request> receivedRequests;
-	@OneToMany(mappedBy = "admin")
-	private Set<Message> messages;
 
 	public Set<Request> getReceivedRequests() {
 		return receivedRequests;
@@ -30,13 +28,5 @@ public class Admin extends User {
 
 	public void setNumberOfRequests() {
 		this.numberOfRequests = receivedRequests.size();
-	}
-
-	public Set<Message> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(Set<Message> newMessages) {
-		this.messages = newMessages;
 	}
 }
