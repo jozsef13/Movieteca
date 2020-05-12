@@ -1,5 +1,7 @@
 package com.project.module;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -13,7 +15,7 @@ public class Admin extends User {
 	private int numberOfRequests = 0;
 	@OneToMany(mappedBy = "admin")
 	private Set<Request> receivedRequests;
-
+	
 	public Set<Request> getReceivedRequests() {
 		return receivedRequests;
 	}

@@ -1,5 +1,6 @@
 package com.project.module;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -49,6 +50,41 @@ public class Movie {
 	private Set<Cart> carts;
 	@ManyToMany(mappedBy = "orederedMovies")
 	private Set<Order> orders;
+	
+	public Movie(int id, String name, int stock, String genre, String mainActors, String witers, String directors,
+			String playTime, double rating, double iMDbRating, String description, String trailerLink,
+			String releaseDate, int nrOfReviews, double averageRating, double buyPrice, double rentPrice,
+			String imagePath, String orderType, int orderQuantity, String returningDate, Provider provider,
+			Set<MovieReview> reviewsReceived, Set<Cart> carts, Set<Order> orders) {
+		this.id = id;
+		this.name = name;
+		this.stock = stock;
+		this.genre = genre;
+		this.mainActors = mainActors;
+		this.witers = witers;
+		this.directors = directors;
+		this.playTime = playTime;
+		this.rating = rating;
+		this.iMDbRating = iMDbRating;
+		this.description = description;
+		this.trailerLink = trailerLink;
+		this.releaseDate = releaseDate;
+		this.nrOfReviews = nrOfReviews;
+		this.averageRating = averageRating;
+		this.buyPrice = buyPrice;
+		this.rentPrice = rentPrice;
+		this.imagePath = imagePath;
+		this.orderType = orderType;
+		this.orderQuantity = orderQuantity;
+		this.returningDate = returningDate;
+		this.provider = provider;
+		this.reviewsReceived = new HashSet<MovieReview>();
+		this.carts = new HashSet<Cart>();
+		this.orders = new HashSet<Order>();
+	}
+
+	public Movie() {
+	}
 
 	public String getReturningDate() {
 		return returningDate;
