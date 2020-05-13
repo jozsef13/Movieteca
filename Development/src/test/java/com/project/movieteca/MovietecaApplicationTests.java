@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.util.Assert;
 
 import com.project.module.Admin;
@@ -34,8 +35,9 @@ class MovietecaApplicationTests {
 
 		Admin admin = new Admin(6, requests, new User(1, "User1", "User1_2", "User1_3", "user@email.com", "Admin", "M", "Test123", "12.01.1998", "Romania", "Dolj", "Craiova", "Str. Trandafirului", "0746969696", null, true, null));
 		
-		Request request = admin.getRequestById(4);
-		Assert.isTrue(request == fourthRequest);
+		Request request = admin.getRequestById(3);
+		//Assert.isTrue(request == fourthRequest);
+		assertEquals(4,request.getId());
 	}
 	
 	@Test
@@ -60,6 +62,7 @@ class MovietecaApplicationTests {
 
 		List<Request> returnedRequest = admin.getRequestsByType("add movie22");
 		
-		Assert.isTrue(!returnedRequest.isEmpty());
+		//Assert.isTrue(!returnedRequest.isEmpty());
+		assertEquals(!returnedRequest.isEmpty(), true);
 	}
 }
