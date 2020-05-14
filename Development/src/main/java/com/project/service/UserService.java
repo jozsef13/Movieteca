@@ -25,6 +25,7 @@ import com.project.module.MyUserDetails;
 import com.project.module.PaymentPlan;
 import com.project.module.PlanType;
 import com.project.module.Provider;
+import com.project.module.ProviderReview;
 import com.project.module.User;
 import com.project.repository.AdminRepository;
 import com.project.repository.CustomerRepository;
@@ -301,5 +302,59 @@ public class UserService implements UserDetailsService {
 
 	public Provider getProviderById(int id) {
 		return providerRepository.getOne(id);
+	}
+
+	public User getUserById(int id) {
+		if (adminRepository.existsById(id)) {
+			return adminRepository.getOne(id);
+		} else if (providerRepository.existsById(id)) {
+			return providerRepository.getOne(id);
+		} else if (customerRepository.existsById(id)) {
+			return customerRepository.getOne(id);
+		}
+
+		return null;
+	}
+
+	public Provider addReviewToProvider(int id, ProviderReview review) {
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Customer customer = (Customer) userDetails.getUser();
+		Provider provider = providerRepository.getOne(id);
+		review.setCustomer(customer);
+		review.setProvider(provider);
+		customer.getProviderReviewsAdded().add(review);
+		provider.getReceivedReviews().add(review);
+		provider.setAverageRating();
+		provider.setNrOfReviews();
+		
+		providerRepository.save(provider);
+		return provider;
+	}
+
+	public User banUser(int id) {
+		User user = getUserById(id);
+		user.setActive(false);
+		if(user.getUserType().equals("Customer")) {
+			Customer customer = (Customer) user;
+			customerRepository.save(customer);
+		} else if(user.getUserType().equals("Provider")) {
+			Provider provider = (Provider) user;
+			providerRepository.save(provider);
+		}
+		return user;
+	}
+
+	public User activateAccount(int id) {
+		User user = getUserById(id);
+		user.setActive(true);
+		if(user.getUserType().equals("Customer")) {
+			Customer customer = (Customer) user;
+			customerRepository.save(customer);
+		} else if(user.getUserType().equals("Provider")) {
+			Provider provider = (Provider) user;
+			providerRepository.save(provider);
+		}
+		return user;
 	}
 }

@@ -223,10 +223,99 @@ input[type=number] {
 														value="${movie.name}" /></a>
 											</h3>
 											<p class="mb-0 rated">
-												<span>Rating: <span class="fa fa-star checked"></span>
-													<span class="fa fa-star checked"></span> <span
-													class="fa fa-star checked"></span> <span class="fa fa-star"></span>
-													<span class="fa fa-star"></span></span>
+												<span>Rating: <c:choose>
+														<c:when
+															test="${movie.averageRating <= 0 }">
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 1 and movie.averageRating < 2 }">
+															<span class="fa fa-star-half checked"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 2 and movie.averageRating < 3 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 3 and movie.averageRating < 4 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star-half checked"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 4 and movie.averageRating < 5 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 5 and movie.averageRating < 6 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star-half checked"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 6 and movie.averageRating < 7 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 7 and movie.averageRating < 8 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star-half checked"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 8 and movie.averageRating < 9 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star"></span>
+														</c:when>
+														<c:when
+															test="${movie.averageRating > 9 and movie.averageRating < 10 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star-half checked"></span>
+														</c:when>
+														<c:when test="${movie.averageRating >= 10 }">
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+															<span class="fa fa-star checked"></span>
+														</c:when>
+													</c:choose>
+												</span>
+											</p>
+											<p>
+												<strong class="text-primary h6">Provided by: <c:out value="${movie.provider.userName }"></c:out></strong>
 											</p>
 											<p>
 												<strong class="text-primary h4"><c:out
@@ -259,30 +348,30 @@ input[type=number] {
 												</c:choose>
 											</p>
 											<p>
-											<security:authorize access="hasAnyRole('Customer')">
-												<c:choose>
-													<c:when test="${movie.stock > 0 }">
-														<form
-															action="/addToCart/Movie/<c:out value="${movie.id}" />">
-															<input type="radio" name="orderType" value="Rent">
-															<label for="male">Rent</label> <input type="radio"
-																name="orderType" value="Buy"> <label
-																for="female">Buy</label> <br> <input type="submit"
-																name="Add to Cart" value="Add to Cart">
-														</form>
-													</c:when>
-													<c:when test="${movie.stock <= 0 }">
-														<form
-															action="/addToCart/Movie/<c:out value="${movie.id}" />">
-															<input type="radio" name="orderType" value="Rent"
-																disabled> <label for="male">Rent</label> <input
-																type="radio" name="orderType" value="Buy" disabled>
-															<label for="female">Buy</label> <br> <input
-																type="submit" name="Add to Cart" value="Add to Cart"
-																disabled>
-														</form>
-													</c:when>
-												</c:choose>
+												<security:authorize access="hasAnyRole('Customer')">
+													<c:choose>
+														<c:when test="${movie.stock > 0 }">
+															<form
+																action="/addToCart/Movie/<c:out value="${movie.id}" />">
+																<input type="radio" name="orderType" value="Rent">
+																<label for="male">Rent</label> <input type="radio"
+																	name="orderType" value="Buy" checked="checked">
+																<label for="female">Buy</label> <br> <input
+																	type="submit" name="Add to Cart" value="Add to Cart">
+															</form>
+														</c:when>
+														<c:when test="${movie.stock <= 0 }">
+															<form
+																action="/addToCart/Movie/<c:out value="${movie.id}" />">
+																<input type="radio" name="orderType" value="Rent"
+																	disabled> <label for="male">Rent</label> <input
+																	type="radio" name="orderType" value="Buy" disabled>
+																<label for="female">Buy</label> <br> <input
+																	type="submit" name="Add to Cart" value="Add to Cart"
+																	disabled>
+															</form>
+														</c:when>
+													</c:choose>
 												</security:authorize>
 											</p>
 										</div>
@@ -364,11 +453,11 @@ input[type=number] {
 									<div class="ui-grid-a">
 										<div data-role="fieldcontain" class="ui-hide-label ui-block a">
 											<input type="number" min="0" name="minPrice" id="minPrice"
-												placeholder="min">
+												placeholder="min" required>
 										</div>
 										<div data-role="fieldcontain" class="ui-hide-label ui-block b">
 											<input type="number" min="0" name="maxPrice" id="maxPrice"
-												placeholder="max">
+												placeholder="max" required>
 										</div>
 									</div>
 									<br> <input type="submit"
@@ -382,7 +471,8 @@ input[type=number] {
 									<div class="col-md-10" id="error">
 										<c:if test="${not empty errorMessage }">
 											<p style="color: red; font-weight: bold; margin: 30px 0px;">
-												<i class="icon-info-circle"></i> <c:out value="${errorMessage}"></c:out>
+												<i class="icon-info-circle"></i>
+												<c:out value="${errorMessage}"></c:out>
 											</p>
 										</c:if>
 									</div>

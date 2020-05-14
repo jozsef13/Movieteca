@@ -1,10 +1,6 @@
 package com.project.module;
 
-<<<<<<< Updated upstream
-import java.util.LinkedHashSet;
-=======
 import java.util.HashSet;
->>>>>>> Stashed changes
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,11 +26,7 @@ public class Cart {
 	private Customer customer;
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "moviesFromCart", joinColumns = @JoinColumn(name = "cartId"), inverseJoinColumns = @JoinColumn(name = "movieId"))
-<<<<<<< Updated upstream
-	private Set<Movie> moviesInCart = new LinkedHashSet<Movie>();
-=======
 	private Set<Movie> moviesInCart = new HashSet<Movie>();
->>>>>>> Stashed changes
 
 	public int getId() {
 		return id;

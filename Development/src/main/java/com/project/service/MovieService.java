@@ -11,10 +11,14 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.module.Customer;
 import com.project.module.Movie;
+import com.project.module.MovieReview;
+import com.project.module.MyUserDetails;
 import com.project.module.Provider;
 import com.project.repository.MovieRepository;
 import com.project.repository.ProviderRepository;
@@ -35,6 +39,7 @@ public class MovieService {
 		fout.write(img.getBytes());
 		fout.close();
 		movie.setImagePath(imgFile);
+		provider.setPermission(false);
 		movie.setProvider(provider);
 		movieRepo.save(movie);
 	}
@@ -162,5 +167,21 @@ public class MovieService {
 		movie.setRentPrice(rentPrice);
 		movie.setStock(stock);
 		return movieRepo.save(movie);
+	}
+
+	public Movie addMovieReview(int id, MovieReview review) {
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Customer customer = (Customer) userDetails.getUser();
+		Movie movie = movieRepo.getOne(id);
+		review.setCustomer(customer);
+		review.setMovie(movie);
+		movie.getReviewsReceived().add(review);
+		movie.setAverageRating();
+		movie.setNrOfReviews();
+		customer.getMovieReviewsAdded().add(review);
+		
+		movieRepo.save(movie);
+		return movie;
 	}
 }

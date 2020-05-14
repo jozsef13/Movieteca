@@ -173,11 +173,6 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 										<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 									</div>
 								</div>
-
-								<div class="col-md-6">
-									<a href="#"><span class="psw">Forgot your
-											username/password?</a></span>
-								</div>
 								<br>
 
 								<div class="col-lg-13">

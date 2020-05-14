@@ -17,12 +17,21 @@ public class Message {
 	private int id;
 	private String textMessage;
 	private String messageType;
+	private String sentDateTime;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "costumerId", nullable = false)
 	private Customer customer;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "providerId", nullable = false)
 	private Provider provider;
+
+	public String getSentDateTime() {
+		return sentDateTime;
+	}
+
+	public void setSentDateTime(String sentDateTime) {
+		this.sentDateTime = sentDateTime;
+	}
 
 	public Customer getCustomer() {
 		return customer;

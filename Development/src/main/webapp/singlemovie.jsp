@@ -142,7 +142,6 @@
 									</p>
 								</div>
 							</div>
-
 						</div>
 					</c:if>
 					<div class="col-md-12 mb-0">
@@ -186,12 +185,108 @@
 							<b>Trailer Link:</b> <a href="${movie.trailerLink}"> Click
 								here </a>
 						</p>
+						<p>
+							<b>iMDb rating: </b>${movie.iMDbRating }
+						</p>
+						<p>
+							<b>Average rating: </b>${movie.averageRating }
+							<c:choose>
+								<c:when test="${movie.averageRating <= 0 }">
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 1 and movie.averageRating < 2 }">
+									<span class="fa fa-star-half checked"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 2 and movie.averageRating < 3 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 3 and movie.averageRating < 4 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star-half checked"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 4 and movie.averageRating < 5 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 5 and movie.averageRating < 6 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star-half checked"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 6 and movie.averageRating < 7 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 7 and movie.averageRating < 8 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star-half checked"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 8 and movie.averageRating < 9 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star"></span>
+								</c:when>
+								<c:when
+									test="${movie.averageRating > 9 and movie.averageRating < 10 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star-half checked"></span>
+								</c:when>
+								<c:when test="${movie.averageRating >= 10 }">
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+									<span class="fa fa-star checked"></span>
+								</c:when>
+							</c:choose>
+						</p>
 						<p style="font-size: 16px">
 							<strong class="text-primary h4"> ${movie.rentPrice}$ /
 								${movie.buyPrice}$</strong>
 						</p>
 						<p style="font-size: 16px">
-							<b>Sold by: <c:out value="${movie.provider.userName }"></c:out></b>
+							<b>Sold by: <a
+								href="/user/<c:out value="${movie.provider.id}"/>"><c:out
+										value="${movie.provider.userName }"></c:out></a></b>
 						</p>
 						<security:authorize access="hasAnyRole('Customer')">
 							<p>
@@ -223,9 +318,10 @@
 								<c:when test="${movie.stock > 0 }">
 									<form action="/addToCart/Movie/<c:out value="${movie.id}" />">
 										<div class="mb-1 d-flex">
-											<input type="radio" value="Buy" name="orderType"><label
-												for="male">Buy</label> <input type="radio" value="Rent"
-												name="orderType"><label for="male">Rent</label>
+											<input type="radio" value="Buy" name="orderType"
+												checked="checked"><label for="male">Buy</label> <input
+												type="radio" value="Rent" name="orderType"><label
+												for="male">Rent</label>
 										</div>
 										<div class="mb-5">
 											<div class="input-group mb-3" style="max-width: 120px;">
@@ -243,8 +339,15 @@
 												</div>
 											</div>
 										</div>
-										<input type="submit" class="buy-now btn btn-sm btn-primary"
-											value="Add to Cart">
+										<div class="col-md-5"
+											style="display: inline-block; text-align: left;">
+											<input style="display: inline-block;" type="submit"
+												class="btn btn-primary btn-lg btn-block" value="Add to cart">
+										</div>
+										<div class="col-md-5" style="display: inline-block">
+											<a href="/movie/addReviewPage/<c:out value="${movie.id }"/>"
+												class="btn btn-primary btn-lg btn-block">Add review</a>
+										</div>
 									</form>
 								</c:when>
 								<c:otherwise>
@@ -270,9 +373,12 @@
 												</div>
 											</div>
 										</div>
-										<input type="submit" class="buy-now btn btn-sm btn-primary"
-											value="Add to Cart" disabled>
-
+										<br>
+										<div class="col-md-5"
+											style="display: inline-block; text-align: right;">
+											<input style="display: inline-block;" type="submit"
+												class="btn btn-primary btn-lg btn-block" value="Add to cart">
+										</div>
 									</form>
 								</c:otherwise>
 							</c:choose>
@@ -312,7 +418,22 @@
 							<c:forEach items="${movie.reviewsReceived}" var="review">
 								<div class="item">
 									<div class="block-4">
-										<div class="block-4-text p-4"></div>
+										<div class="block-4-text p-2">
+											<b>User: </b><a
+												href="/user/<c:out value="${review.customer.id}"/>"><c:out
+													value="${review.customer.userName }"></c:out></a>
+										</div>
+										<div class="block-4-text p-2">
+											<b>Rating: </b>
+											<c:out value="${review.rating }"></c:out>
+										</div>
+										<div class="block-4-text p-2">
+											<b>Review: </b>
+											<c:out value="${review.reviewText }"></c:out>
+										</div>
+										<div class="block-4-text p-2">
+											<b><a href="/contact">Report user</a></b>
+										</div>
 									</div>
 								</div>
 							</c:forEach>
@@ -335,11 +456,6 @@
 
 	<script src="/js/main.js"></script>
 	<script>
-		function myFunction() {
-			location.href = "/myaccount"
-		};
-	</script>
-		<script>
 		function myFunction() {
 			location.href = "/myaccount"
 		};

@@ -181,8 +181,9 @@ input[type=number] {
 								<p>
 									<b>Genre:</b> <input type="text" class="form-control"
 										id="c_fname" name="genre">
-										<p>
-									<small><i class="icon-info-circle"></i> Only one genre as the main genre!</small>
+								<p>
+									<small><i class="icon-info-circle"></i> Only one genre
+										as the main genre!</small>
 								</p>
 								</p>
 								<p>
@@ -245,8 +246,9 @@ input[type=number] {
 											<button class="btn btn-outline-primary js-btn-minus"
 												type="button">&minus;</button>
 										</div>
-										<input type="number" class="form-control text-center" value="1"
-											placeholder="" aria-label="Example text with button addon"
+										<input type="number" class="form-control text-center"
+											value="1" placeholder=""
+											aria-label="Example text with button addon"
 											aria-describedby="button-addon1" name="stock">
 										<div class="input-group-append">
 											<button class="btn btn-outline-primary js-btn-plus"
@@ -260,8 +262,33 @@ input[type=number] {
 									</p>
 
 								</div>
-								<input type="submit" class="buy-now btn btn-sm btn-primary"
-									value="Add Movie">
+
+								<security:authorize access="hasRole('Provider')">
+									<security:authentication property="principal.user.permission"
+										var="permission" />
+									<c:choose>
+										<c:when test="${permission eq false }">
+											<input style="display: inline-block;" type="submit"
+												class="btn btn-primary btn-lg btn-block" value="Add movie"
+												disabled="disabled">
+											<p>
+												<small><i class="icon-info-circle"></i> If you want
+													to post a movie, you have to go to the <a href="/contact">Contact</a> page and ask
+													permission for this by sending a request with the title
+													"Add Movie" and giving all the details about the movie. The
+													requests will be further approved or denied!</small>
+											</p>
+										</c:when>
+										<c:otherwise>
+											<input style="display: inline-block;" type="submit"
+												class="btn btn-primary btn-lg btn-block" value="Add movie">
+										</c:otherwise>
+									</c:choose>
+								</security:authorize>
+								<security:authorize access="hasRole('Admin')">
+									<input style="display: inline-block;" type="submit"
+										class="btn btn-primary btn-lg btn-block" value="Add movie">
+								</security:authorize>
 							</div>
 						</div>
 					</form>
@@ -297,15 +324,33 @@ input[type=number] {
 												type="button">&plus;</button>
 										</div>
 									</div>
-									
+
 									<div class="col-md-5" style="display: inline-block">
-											<a href="/movie/<c:out value="${movie.id }"/>" class="btn btn-danger btn-md btn-block">BACK</a>
-										</div>
-										<div class="col-md-5"
-											style="display: inline-block; text-align: right;">
+										<a href="/movie/<c:out value="${movie.id }"/>"
+											class="btn btn-danger btn-md btn-block">BACK</a>
+									</div>
+									<div class="col-md-5"
+										style="display: inline-block; text-align: right;">
+										<security:authorize access="hasRole('Provider')">
+											<security:authentication property="principal.user.permission"
+												var="permission" />
+											<c:choose>
+												<c:when test="${permission eq false }">
+													<input style="display: inline-block;" type="submit"
+														class="btn btn-primary btn-lg btn-block" value="EDIT"
+														disabled="disabled">
+												</c:when>
+												<c:otherwise>
+													<input style="display: inline-block;" type="submit"
+														class="btn btn-primary btn-lg btn-block" value="EDIT">
+												</c:otherwise>
+											</c:choose>
+										</security:authorize>
+										<security:authorize access="hasRole('Admin')">
 											<input style="display: inline-block;" type="submit"
 												class="btn btn-primary btn-lg btn-block" value="EDIT">
-										</div>
+										</security:authorize>
+									</div>
 								</div>
 							</div>
 						</div>

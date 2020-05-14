@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.module.Movie;
+import com.project.module.MovieReview;
 import com.project.module.MyUserDetails;
 import com.project.module.Provider;
 import com.project.service.MovieService;
@@ -40,12 +41,17 @@ public class MovieController {
 		Provider provider = new Provider();
 		if(userDetails.getUser().getUserType().equals("Provider")) {
 			provider = (Provider) userDetails.getUser();
+			if(!provider.isPermission()) {
+				System.out.println(provider.isPermission());
+				return new ModelAndView("forbidden");
+			}
 		} else if(userDetails.getUser().getUserType().equals("Admin")) {
 			provider = userService.getProviderById(2);
 		}
 		
 		ModelAndView model = new ModelAndView("singlemovie");
 		movieService.addMovie(movie, img, provider);
+		model.addObject("errorMessage", "You successfuly added a post/movie!");
 		model.addObject(movie);
 		return model;
 	}
@@ -155,6 +161,16 @@ public class MovieController {
 		return model;
 	}
 	
+	@GetMapping("/movies/byProvider/{id}")
+	public ModelAndView getAllMoviesPostedByProvider(@PathVariable int id) {
+		ModelAndView model = new ModelAndView("moviePostedBy");
+		List<Movie> movies = new ArrayList<Movie>(movieService.getAllMoviesByProvider(id));
+		Provider provider = userService.getProviderById(id);
+		model.addObject("movies", movies).addObject("numberOfMovies", movies.size()).addObject("provider", provider);
+
+		return model;
+	}
+	
 	@GetMapping("/movies/edit")
 	public ModelAndView getAllMoviesToEdit() {
 		ModelAndView model = new ModelAndView("editmovielist");
@@ -187,5 +203,23 @@ public class MovieController {
 	@RequestMapping(value = "/addMoviePage")
 	public ModelAndView addMoviePage() {
 		return new ModelAndView("editmovie");
+	}
+	
+	@RequestMapping(value = "/movie/addReviewPage/{id}")
+	public ModelAndView addReviewPage(@PathVariable int id) {
+		ModelAndView model = new ModelAndView("addmoviereview");
+		Movie movie = movieService.getMovieById(id);
+		model.addObject(movie);
+		return model;
+	}
+	
+	@RequestMapping(value = "/movie/addReview/{id}")
+	public ModelAndView addReview(@PathVariable int id, MovieReview review) {
+		ModelAndView model = new ModelAndView("singlemovie");
+		Movie movie = movieService.addMovieReview(id, review);
+		String message = "Successfuly added review!";
+		model.addObject("errorMessage", message );
+		model.addObject("movie", movie);
+		return model;
 	}
 }

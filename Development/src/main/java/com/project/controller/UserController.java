@@ -23,6 +23,7 @@ import com.project.module.Admin;
 import com.project.module.Customer;
 import com.project.module.MyUserDetails;
 import com.project.module.Provider;
+import com.project.module.ProviderReview;
 import com.project.module.User;
 import com.project.service.UserService;
 import com.project.validator.UserValidator;
@@ -157,4 +158,55 @@ public class UserController {
 		}
 	}
 
+	@RequestMapping(value="/user/{id}")
+	public ModelAndView getUserById(@PathVariable int id)
+	{
+		ModelAndView model = new ModelAndView("userinfo");
+		User user = userService.getUserById(id);
+		if(user != null) {
+			model.addObject("user", user);
+			return model;
+		} else {
+			return new ModelAndView("forbidden");
+		}
+	}
+	
+	@RequestMapping(value = "/provider/addReviewPage/{id}")
+	public ModelAndView getAddReviewProviderPage(@PathVariable int id) {
+		ModelAndView model = new ModelAndView("addproviderreview");
+		Provider provider = userService.getProviderById(id);
+		model.addObject("provider", provider);
+		
+		return model;
+	}
+	
+	@RequestMapping(value = "/provider/addReview/{id}")
+	public ModelAndView addReviewToProvider(ProviderReview review, @PathVariable int id) {
+		ModelAndView model = new ModelAndView("userinfo");
+		Provider provider = userService.addReviewToProvider(id, review);
+		String message = "Successfuly added review!";
+		model.addObject("errorMessage", message );
+		model.addObject("user", provider);
+		return model;
+	}
+	
+	@RequestMapping(value = "/user/ban/{id}")
+	public ModelAndView banUser(@PathVariable int id) {
+		ModelAndView model = new ModelAndView("userinfo");
+		User user = userService.banUser(id);
+		String message = "Successfuly banned user!";
+		model.addObject("errorMessage", message );
+		model.addObject("user", user);
+		return model;
+	}
+	
+	@RequestMapping("/user/activateAccount/{id}")
+	public ModelAndView activateAccount(@PathVariable int id) {
+		ModelAndView model = new ModelAndView("userinfo");
+		User user = userService.activateAccount(id);
+		String message = "Successfuly activated user account!";
+		model.addObject("errorMessage", message );
+		model.addObject("user", user);
+		return model;
+	}
 }

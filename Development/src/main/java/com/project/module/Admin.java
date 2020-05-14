@@ -15,7 +15,7 @@ public class Admin extends User {
 	private int numberOfRequests = 0;
 	@OneToMany(mappedBy = "admin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Request> receivedRequests;
-
+	
 	public Set<Request> getReceivedRequests() {
 		return receivedRequests;
 	}

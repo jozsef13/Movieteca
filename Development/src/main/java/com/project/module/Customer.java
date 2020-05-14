@@ -25,9 +25,20 @@ public class Customer extends User{
 	private Cart cart;
 	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Order> orders;
-	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true)
 	private Set<Message> messages;
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<Request> requestsSent;
 	
+	public Set<Request> getRequestsSent() {
+		return requestsSent;
+	}
+
+	public void setRequestsSent(Set<Request> requestsSent) {
+		this.requestsSent = requestsSent;
+	}
+
 	public Set<ProviderReview> getProviderReviewsAdded() {
 		return providerReviewsAdded;
 	}

@@ -3,6 +3,7 @@ package com.project.module;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -20,6 +21,8 @@ public class Provider extends User {
 	private double averageRating = 0;
 	private int nrOfReviews = 0;
 	private int nrRequestSent = 0;
+	@Column(columnDefinition = "bit default 0")
+	private boolean permission;
 	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Request> requestsSent;
 	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -29,8 +32,17 @@ public class Provider extends User {
 	@ManyToOne
 	@JoinColumn(name = "planId", nullable = false)
 	private PaymentPlan paymentPlan;
-	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.REMOVE}, orphanRemoval = true)
 	private Set<Message> messages;
+
+	public boolean isPermission() {
+		return permission;
+	}
+
+	public void setPermission(boolean permission) {
+		this.permission = permission;
+	}
 
 	public Set<ProviderReview> getReceivedReviews() {
 		return receivedReviews;

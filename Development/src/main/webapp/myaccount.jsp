@@ -254,6 +254,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 				<security:authorize access="hasAnyRole('Customer')">
 					<security:authentication property="principal.user.orders"
 						var="orders" />
+						<security:authentication property="principal.user.requestsSent"
+						var="requests" />
 					<security:authentication property="principal.user.messages"
 						var="messages" />
 					<security:authentication
@@ -263,7 +265,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 						property="principal.user.movieReviewsAdded" var="movieReviews" />
 					<div class="container">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-3">
 								<div class="panel-group" id="accordion-alt3">
 									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
 									<div class="panel">
@@ -293,7 +295,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 								</div>
 							</div>
 
-							<div class="col-md-4">
+							<div class="col-md-3">
 								<div class="panel-group" id="accordion-alt3">
 									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
 									<div class="panel">
@@ -312,14 +314,14 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 												<ul>
 													<c:forEach items="${providerReviews}" var="providerReview">
 														<li><a
-															href="/provider/review/<c:out value="${providerReview.id }"/>">Review
+															href="/user/<c:out value="${providerReview.provider.id }"/>">Review
 																#<c:out value="${providerReview.id}" /> for <c:out
 																	value="${providerReview.provider.userName}" />
 														</a></li>
 													</c:forEach>
 													<c:forEach items="${movieReviews}" var="movieReview">
 														<li><a
-															href="/movie/review/<c:out value="${movieReview.id }"/>">Review
+															href="/movie/<c:out value="${movieReview.movie.id }"/>">Review
 																#<c:out value="${movieReview.id}" /> for <c:out
 																	value="${movieReview.movie.name}" />
 														</a></li>
@@ -331,7 +333,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 								</div>
 							</div>
 
-							<div class="col-md-4">
+							<div class="col-md-3">
 								<div class="panel-group" id="accordion-alt3">
 									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
 									<div class="panel">
@@ -350,9 +352,40 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 												<ul>
 													<c:forEach items="${messages}" var="message">
 														<li><a
-															href="/conversation/<c:out value="${message.id }"/>">Conversation
+															href="/sendMessage/<c:out value="${message.provider.id }"/>">Message
 																#<c:out value="${message.id}" />, <c:out
 																	value="${message.provider.userName}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseFour-alt3"> <i
+													class="fa fa-angle-right"></i> Requests(<c:out
+														value="${requests.size() }"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseFour-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${requests}" var="request">
+														<li><a
+															href="/request/<c:out value="${request.id }"/>">Request
+																#<c:out value="${request.id}" />, <c:out
+																	value="${request.status}" />
 														</a></li>
 													</c:forEach>
 												</ul>
@@ -423,7 +456,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 												<ul>
 													<c:forEach items="${reviews}" var="review">
 														<li><a
-															href="/provider/review/<c:out value="${review.id }"/>">Review
+															href="/user/<c:out value="${review.provider.id }"/>">Review
 																#<c:out value="${review.id}" /> for <c:out
 																	value="${review.customer.userName}" />
 														</a></li>
@@ -454,7 +487,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 												<ul>
 													<c:forEach items="${messages}" var="message">
 														<li><a
-															href="/conversation/<c:out value="${message.id }"/>">Conversation
+															href="/sendMessage/<c:out value="${message.customer.id }"/>">Conversation
 																#<c:out value="${message.id}" />, <c:out
 																	value="${message.customer.userName}" />
 														</a></li>
@@ -494,7 +527,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 												<ul>
 													<c:forEach items="${requests}" var="request">
 														<li><a
-															href="/request/edit/<c:out value="${request.id }"/>">Order
+															href="/request/<c:out value="${request.id }"/>">Order
 																#<c:out value="${request.id}" />, <c:out
 																	value="${request.status}" />
 														</a></li>
