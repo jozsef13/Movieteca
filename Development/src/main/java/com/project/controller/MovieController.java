@@ -8,9 +8,11 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,18 +20,32 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.module.Movie;
+import com.project.module.MyUserDetails;
+import com.project.module.Provider;
 import com.project.service.MovieService;
+import com.project.service.UserService;
 
 @RestController
 public class MovieController {
 
 	@Autowired
 	private MovieService movieService;
+	@Autowired
+	private UserService userService;
 
 	@PostMapping("/addMovie")
-	public ModelAndView addMovie(Movie movie, @RequestPart MultipartFile img) throws IOException {
+	public ModelAndView addMovie(Movie movie, @RequestPart MultipartFile img, HttpServletRequest request) throws IOException {
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Provider provider = new Provider();
+		if(userDetails.getUser().getUserType().equals("Provider")) {
+			provider = (Provider) userDetails.getUser();
+		} else if(userDetails.getUser().getUserType().equals("Admin")) {
+			provider = userService.getProviderById(2);
+		}
+		
 		ModelAndView model = new ModelAndView("singlemovie");
-		movieService.addMovie(movie, img);
+		movieService.addMovie(movie, img, provider);
 		model.addObject(movie);
 		return model;
 	}
@@ -45,7 +61,7 @@ public class MovieController {
 		} else {
 			List<Movie> movies = new ArrayList<Movie>(movieService.getAllMoviesByPage(currentPage));
 			int noOfPages = movieService.getNumberOfPages();
-			
+
 			model.addObject("numberOfMovies", numberOfMovies).addObject("movies", movies)
 					.addObject("currentPage", currentPage).addObject("noOfPages", noOfPages);
 
@@ -84,6 +100,15 @@ public class MovieController {
 	public ModelAndView getMoviesByGenre(HttpServletRequest request) {
 		ModelAndView model = new ModelAndView("movies");
 		String[] genre = request.getParameterValues("genre");
+		if (genre == null) {
+			String error = "You must select a genre!";
+			List<Movie> movies = new ArrayList<Movie>(movieService.getAllMoviesByPage(1));
+			int noOfPages = movieService.getNumberOfPages();
+			long numberOfMovies = movieService.getNumberOfMovies();
+			model.addObject("numberOfMovies", numberOfMovies).addObject("movies", movies).addObject("currentPage", 1)
+					.addObject("noOfPages", noOfPages).addObject("errorMessage", error);
+			return model;
+		}
 		List<Movie> movies = movieService.getAllMoviesByGenre(genre);
 		long numberOfMovies = movieService.getNumberOfMovies();
 
@@ -97,9 +122,10 @@ public class MovieController {
 		List<Movie> movies = movieService.getMovieSortedByName(sortTypeName, currentPage);
 		long numberOfMovies = movieService.getNumberOfMovies();
 		int noOfPages = movieService.getNumberOfPages();
-		
+
 		model.addObject("numberOfMovies", numberOfMovies).addObject("movies", movies)
-		.addObject("currentPage", currentPage).addObject("noOfPages", noOfPages).addObject("sortTypeName", sortTypeName);
+				.addObject("currentPage", currentPage).addObject("noOfPages", noOfPages)
+				.addObject("sortTypeName", sortTypeName);
 
 		return model;
 	}
@@ -117,5 +143,49 @@ public class MovieController {
 				.addObject("searchString", nameString);
 
 		return model;
+	}
+
+	@GetMapping("/movies/provider/{id}")
+	public ModelAndView getAllMoviesByProvider(@PathVariable int id) {
+		ModelAndView model = new ModelAndView("editmovielist");
+		List<Movie> movies = new ArrayList<Movie>(movieService.getAllMoviesByProvider(id));
+
+		model.addObject("movies", movies).addObject("numberOfMovies", movies.size());
+
+		return model;
+	}
+	
+	@GetMapping("/movies/edit")
+	public ModelAndView getAllMoviesToEdit() {
+		ModelAndView model = new ModelAndView("editmovielist");
+		List<Movie> movies = new ArrayList<Movie>(movieService.getAllMovies());
+
+		model.addObject("movies", movies).addObject("numberOfMovies", movies.size());
+
+		return model;
+	}
+	
+	@RequestMapping(value="/movie/editPage/{id}")
+	public ModelAndView editMoviePage(@PathVariable int id) {
+		ModelAndView model = new ModelAndView("editmovie");
+		Movie movie = movieService.getMovieById(id);
+		model.addObject("movie", movie);
+		return model;
+	}
+	
+	@RequestMapping(value="/movie/edit/{id}")
+	public ModelAndView editMovieById(@PathVariable int id, @RequestParam double buyPrice, @RequestParam double rentPrice, @RequestParam int stock) throws IOException {
+		ModelAndView model = new ModelAndView("singlemovie");
+		Movie movie = movieService.getMovieById(id);
+		Movie updatedMovie = movieService.updateMovie(movie, buyPrice, rentPrice, stock);
+		String message = "Successfuly updated movie!";
+		model.addObject("message", message );
+		model.addObject("movie", updatedMovie);
+		return model;
+	}
+	
+	@RequestMapping(value = "/addMoviePage")
+	public ModelAndView addMoviePage() {
+		return new ModelAndView("editmovie");
 	}
 }

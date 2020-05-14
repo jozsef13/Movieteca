@@ -15,15 +15,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.module.Movie;
+import com.project.module.Provider;
 import com.project.repository.MovieRepository;
+import com.project.repository.ProviderRepository;
 
 @Service
 public class MovieService {
 
 	@Autowired
 	private MovieRepository movieRepo;
+	@Autowired
+	private ProviderRepository providerRepository;
 
-	public void addMovie(Movie movie, MultipartFile img) throws IOException {
+	public void addMovie(Movie movie, MultipartFile img, Provider provider) throws IOException {
 		String imgFile = "/images/" + img.getOriginalFilename();
 		File upl = new File("src/main/resources/static" + imgFile);
 		upl.createNewFile();
@@ -31,6 +35,7 @@ public class MovieService {
 		fout.write(img.getBytes());
 		fout.close();
 		movie.setImagePath(imgFile);
+		movie.setProvider(provider);
 		movieRepo.save(movie);
 	}
 
@@ -55,17 +60,21 @@ public class MovieService {
 	public List<Movie> getMovieSortedByName(String sortTypeName, int currentPage) {
 		List<Movie> movies = new ArrayList<Movie>(getAllMovies());
 		if (sortTypeName.equals("aToZ")) {
-			movies = movieRepo.findAll(PageRequest.of(currentPage-1, 6, Sort.by("name").ascending())).getContent();
+			movies = movieRepo.findAll(PageRequest.of(currentPage - 1, 6, Sort.by("name").ascending())).getContent();
 		} else if (sortTypeName.equals("zToA")) {
-			movies = movieRepo.findAll(PageRequest.of(currentPage-1, 6, Sort.by("name").descending())).getContent();
+			movies = movieRepo.findAll(PageRequest.of(currentPage - 1, 6, Sort.by("name").descending())).getContent();
 		} else if (sortTypeName.equals("BuyPriceDescending")) {
-			movies = movieRepo.findAll(PageRequest.of(currentPage-1, 6, Sort.by("buyPrice").descending())).getContent();
+			movies = movieRepo.findAll(PageRequest.of(currentPage - 1, 6, Sort.by("buyPrice").descending()))
+					.getContent();
 		} else if (sortTypeName.equals("BuyPriceAscending")) {
-			movies = movieRepo.findAll(PageRequest.of(currentPage-1, 6, Sort.by("buyPrice").ascending())).getContent();
+			movies = movieRepo.findAll(PageRequest.of(currentPage - 1, 6, Sort.by("buyPrice").ascending()))
+					.getContent();
 		} else if (sortTypeName.equals("RentPriceDescending")) {
-			movies = movieRepo.findAll(PageRequest.of(currentPage-1, 6, Sort.by("rentPrice").descending())).getContent();
+			movies = movieRepo.findAll(PageRequest.of(currentPage - 1, 6, Sort.by("rentPrice").descending()))
+					.getContent();
 		} else if (sortTypeName.equals("RentPriceAscending")) {
-			movies = movieRepo.findAll(PageRequest.of(currentPage-1, 6, Sort.by("rentPrice").ascending())).getContent();
+			movies = movieRepo.findAll(PageRequest.of(currentPage - 1, 6, Sort.by("rentPrice").ascending()))
+					.getContent();
 		}
 
 		return movies;
@@ -95,7 +104,7 @@ public class MovieService {
 	}
 
 	public List<Movie> getAllMoviesByPage(int page) {
-		return movieRepo.findAll(PageRequest.of(page - 1, 6)).getContent();
+		return movieRepo.findAll(PageRequest.of(page - 1, 6, Sort.by("stock").descending())).getContent();
 	}
 
 	public List<Movie> getAllMoviesById() {
@@ -141,5 +150,17 @@ public class MovieService {
 			i++;
 		}
 		return noOfPages;
+	}
+
+	public List<Movie> getAllMoviesByProvider(int id) {
+		Provider provider = providerRepository.getOne(id);
+		return movieRepo.findByProvider(provider);
+	}
+
+	public Movie updateMovie(Movie movie, double buyPrice, double rentPrice, int stock) {
+		movie.setBuyPrice(buyPrice);
+		movie.setRentPrice(rentPrice);
+		movie.setStock(stock);
+		return movieRepo.save(movie);
 	}
 }

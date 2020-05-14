@@ -28,36 +28,47 @@
 <link rel="stylesheet" href="/css/aos.css">
 
 <link rel="stylesheet" href="/css/style.css">
+<style>
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>
 </head>
 <body>
 
 	<div class="site-wrap">
 		<header class="site-navbar" role="banner">
-	<div class="site-navbar-top">
-		<div class="container">
-			<div class="row align-items-center">
+		<div class="site-navbar-top">
+			<div class="container">
+				<div class="row align-items-center">
 
-				<div
-					class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
-					<div class="site-logo">
-						<a href="/" class="js-logo-clone">MOVIETECA</a>
+					<div
+						class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+						<div class="site-logo">
+							<a href="/" class="js-logo-clone">MOVIETECA</a>
+						</div>
 					</div>
-				</div>
 
-				<div class="col-7 col-md-7 order-3 order-md-3 text-right">
-					<div class="site-top-icons">
-						<ul>
-							<security:authorize access="hasAnyRole('Customer')">
+					<div class="col-7 col-md-7 order-3 order-md-3 text-right">
+						<div class="site-top-icons">
+							<ul>
+								<security:authorize access="hasAnyRole('Customer')">
 									<security:authentication property="principal.user.cart"
 										var="cart" />
 									<li><c:choose>
 											<c:when test="${empty cart}">
-											<a href="#" class="site-cart">
-												<button class="btn btn-secondary btn-sm site-cart">
-													<span class="icon icon-shopping_cart"></span> <span
-														class="count"> 0 </span>
-												</button>
+												<a href="#" class="site-cart">
+													<button class="btn btn-secondary btn-sm site-cart">
+														<span class="icon icon-shopping_cart"></span> <span
+															class="count"> 0 </span>
+													</button>
 												</a>
 											</c:when>
 											<c:when test="${not empty cart}">
@@ -73,8 +84,8 @@
 											</c:when>
 										</c:choose></li>
 								</security:authorize>
-							<li>
-								<div class="btn-group">
+								<li>
+									<div class="btn-group">
 										<button class="btn btn-secondary btn-sm"
 											onclick="myFunction()" type="button">
 											<span class="icon icon-person"></span>
@@ -94,39 +105,40 @@
 										</security:authorize>
 										<security:authorize access="isAuthenticated()">
 											<div class="dropdown-menu">
-												<a class="dropdown-item" href="/myaccount">My Account</a> 
-												<a class="dropdown-item" href="/logout">Logout</a>
+												<a class="dropdown-item" href="/myaccount">My Account</a> <a
+													class="dropdown-item" href="/logout">Logout</a>
 											</div>
 										</security:authorize>
 									</div>
-							</li>
-							<li class="d-inline-block d-md-none ml-md-0"><a href="#"
-								class="site-menu-toggle js-menu-toggle"><span
-									class="icon-menu"></span></a></li>
-						</ul>
+								</li>
+								<li class="d-inline-block d-md-none ml-md-0"><a href="#"
+									class="site-menu-toggle js-menu-toggle"><span
+										class="icon-menu"></span></a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<nav class="site-navigation text-right text-md-center" role="navigation">
-	<div class="container" style="margin-left: 300px">
-		<ul class="site-menu js-clone-nav d-none d-md-block">
-			<li class="nav-item"><a href="/">Home</a></li>
-			<li class="nav-item"><a href="/movies">Movies</a></li>
-			<li class="nav-item"><a href="/contact">Contact</a></li>
-			<li
-				class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-				<form action="/movies/search" class="site-block-top-search">
-					<span class="icon icon-search2"></span> <input type="text"
-						class="form-control border-0" placeholder="Search.."
-						name="nameString">
-				</form>
-			</li>
-		</ul>
-	</div>
-	</nav> </header>
+		<nav class="site-navigation text-right text-md-center"
+			role="navigation">
+		<div class="container" style="margin-left: 300px">
+			<ul class="site-menu js-clone-nav d-none d-md-block">
+				<li class="nav-item"><a href="/">Home</a></li>
+				<li class="nav-item"><a href="/movies">Movies</a></li>
+				<li class="nav-item"><a href="/contact">Contact</a></li>
+				<li
+					class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+					<form action="/movies/search" class="site-block-top-search">
+						<span class="icon icon-search2"></span> <input type="text"
+							class="form-control border-0" placeholder="Search.."
+							name="nameString">
+					</form>
+				</li>
+			</ul>
+		</div>
+		</nav> </header>
 
 		<div class="bg-light py-3">
 			<div class="container">
@@ -191,8 +203,6 @@
 												href="/movies?sortType=<c:out value = "${orderTypeRB}"/>">Rent
 												Price, Descending</a>
 											<div class="dropdown-divider"></div>
-											<a class="dropdown-item" href="#">Most bought</a> <a
-												class="dropdown-item" href="#">Most rented</a>
 										</div>
 									</div>
 								</div>
@@ -220,8 +230,8 @@
 											</p>
 											<p>
 												<strong class="text-primary h4"><c:out
-														value="${movie.rentPrice}" /> / <c:out
-														value="${movie.buyPrice}" /></strong>
+														value="${movie.rentPrice}" />$ / <c:out
+														value="${movie.buyPrice}" />$</strong>
 											</p>
 											<p>
 												<c:choose>
@@ -249,6 +259,7 @@
 												</c:choose>
 											</p>
 											<p>
+											<security:authorize access="hasAnyRole('Customer')">
 												<c:choose>
 													<c:when test="${movie.stock > 0 }">
 														<form
@@ -272,6 +283,7 @@
 														</form>
 													</c:when>
 												</c:choose>
+												</security:authorize>
 											</p>
 										</div>
 									</div>
@@ -303,7 +315,8 @@
 										</c:if>
 										<c:if test="${not empty sortTypeName }">
 											<c:if test="${currentPage != 1 }">
-												<li><a href="/movies?page=${currentPage-1}&sortType=<c:out value = "${sortTypeName}"/>">&lt;</a></li>
+												<li><a
+													href="/movies?page=${currentPage-1}&sortType=<c:out value = "${sortTypeName}"/>">&lt;</a></li>
 											</c:if>
 
 											<c:forEach begin="1" end="${noOfPages}" var="i">
@@ -312,12 +325,14 @@
 														<li class="active"><span>${i}</span></li>
 													</c:when>
 													<c:otherwise>
-														<li><a href="/movies?page=${i}&sortType=<c:out value = "${sortTypeName}"/>">${i}</a></li>
+														<li><a
+															href="/movies?page=${i}&sortType=<c:out value = "${sortTypeName}"/>">${i}</a></li>
 													</c:otherwise>
 												</c:choose>
 											</c:forEach>
 											<c:if test="${currentPage lt noOfPages }">
-												<li><a href="/movies?page=${currentPage+1}&sortType=<c:out value = "${sortTypeName}"/>">&gt;</a></li>
+												<li><a
+													href="/movies?page=${currentPage+1}&sortType=<c:out value = "${sortTypeName}"/>">&gt;</a></li>
 											</c:if>
 										</c:if>
 									</ul>
@@ -348,11 +363,11 @@
 									</select> <br>
 									<div class="ui-grid-a">
 										<div data-role="fieldcontain" class="ui-hide-label ui-block a">
-											<input type="text" name="minPrice" id="minPrice"
+											<input type="number" min="0" name="minPrice" id="minPrice"
 												placeholder="min">
 										</div>
 										<div data-role="fieldcontain" class="ui-hide-label ui-block b">
-											<input type="text" name="maxPrice" id="maxPrice"
+											<input type="number" min="0" name="maxPrice" id="maxPrice"
 												placeholder="max">
 										</div>
 									</div>
@@ -364,6 +379,13 @@
 							<div class="mb-4">
 								<form action="/movies/genre">
 									<h3 class="mb-3 h6 text-uppercase text-black d-block">Genre</h3>
+									<div class="col-md-10" id="error">
+										<c:if test="${not empty errorMessage }">
+											<p style="color: red; font-weight: bold; margin: 30px 0px;">
+												<i class="icon-info-circle"></i> <c:out value="${errorMessage}"></c:out>
+											</p>
+										</c:if>
+									</div>
 									<label for="s_sm" class="d-flex"> <input
 										type="checkbox" name="genre" value="Action" class="mr-2 mt-1">
 										<span class="text-black">Action</span>

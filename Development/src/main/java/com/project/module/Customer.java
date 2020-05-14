@@ -2,6 +2,7 @@ package com.project.module;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -16,15 +17,15 @@ public class Customer extends User{
 	private int nrMoviesRented = 0;
 	private int nrMoviesInCart = 0;
 	private int nrOfReviewsAdded = 0;
-	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<ProviderReview> providerReviewsAdded;
-	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<MovieReview> movieReviewsAdded;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart;
-	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Order> orders;
-	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Message> messages;
 	
 	public Set<ProviderReview> getProviderReviewsAdded() {

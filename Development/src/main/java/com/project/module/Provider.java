@@ -2,7 +2,9 @@ package com.project.module;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -18,16 +20,16 @@ public class Provider extends User {
 	private double averageRating = 0;
 	private int nrOfReviews = 0;
 	private int nrRequestSent = 0;
-	@OneToMany(mappedBy = "provider")
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Request> requestsSent;
-	@OneToMany(mappedBy = "provider")
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<ProviderReview> receivedReviews;
-	@OneToMany(mappedBy = "provider")
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Movie> moviesPosted;
 	@ManyToOne
 	@JoinColumn(name = "planId", nullable = false)
 	private PaymentPlan paymentPlan;
-	@OneToMany(mappedBy = "provider")
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Message> messages;
 
 	public Set<ProviderReview> getReceivedReviews() {
