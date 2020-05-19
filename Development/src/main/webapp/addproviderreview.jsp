@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@
 taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="security"
@@ -29,10 +28,20 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link rel="stylesheet" href="/css/aos.css">
 
 <link rel="stylesheet" href="/css/style.css">
+<style>
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>
 </head>
 <body>
-
 	<div class="site-wrap">
 		<header class="site-navbar" role="banner">
 		<div class="site-navbar-top">
@@ -86,13 +95,13 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 											aria-expanded="false">
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
-
 										<security:authorize access="!isAuthenticated()">
 											<div class="dropdown-menu">
 												<a class="dropdown-item" href="/login">Login</a> <a
 													class="dropdown-item" href="/register">Register</a>
 											</div>
 										</security:authorize>
+
 										<security:authorize access="isAuthenticated()">
 											<div class="dropdown-menu">
 												<a class="dropdown-item" href="/myaccount">My Account</a> <a
@@ -134,81 +143,75 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 mb-0">
-						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
-							class="text-black">Sign up</strong>
+						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <a
+							href="/user/<c:out value="${provider.id }" />"><c:out
+								value="${provider.userName }"></c:out></a> <span class="mx-2 mb-0">/</span>
+						<strong class="text-black">Add review</strong>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="site-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<h2 class="h3 mb-3 text-black">Creating an account:</h2>
-					</div>
-					<div class="col-md-7">
-						<form action="/registerAs" method="POST">
-							<div class="p-3 p-lg-5 border">
-								<div class="form-group column">
-									<div class="col-md-10" id="error">
-										<c:if test="${not empty errorMessage }">
-											<c:forEach items="${errorMessage }" var="message">
-												<ul>
-													<li
-														style="color: red; font-weight: bold; margin: 30px 0px;"><c:out
-															value="${message}"></c:out></li>
-												</ul>
-											</c:forEach>
-										</c:if>
+			<div class="site-section">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="h3 mb-3 text-black">
+								<c:out value="${provider.userName }"></c:out>
+							</h2>
+						</div>
+						<img style="width: 400px; height: 600px;"
+							src="<c:out value="${provider.profilePicture }"/>">
+
+						<div class="col-md-7">
+
+							<form action="/provider/addReview/<c:out value="${provider.id }"/>"
+								method="post">
+
+								<div class="p-3 p-lg-5 border">
+									<div class="form-group row">
+										<div class="col-md-12">
+											<label for="c_message" class="text-black">Rating <span
+												class="text-danger">*</span></label> <input type="number" step=".1"
+												class="form-control" id="rating" name="rating" placeholder="" min="1" max="10" required>
+										</div>
 									</div>
-									<div class="col-md-12">
-										<label for="c_fname" class="text-black"><b> Select User
-												Type and click on NEXT button </b><br><input type="radio" name="userType"
-											value="Customer" id="customerCheck">
-											Customer <input type="radio" name="userType" value="Provider"
-											id="providerCheck">Provider<br></label>
+									<div class="form-group row">
+										<div class="col-md-12">
+											<label for="c_message" class="text-black">Review <span
+												class="text-danger">*</span></label>
+											<textarea name="reviewText" id="reviewText" cols="30"
+												rows="7" class="form-control"></textarea>
+										</div>
 									</div>
-									<br>
-									<div class="col-md-5" style="display: inline-block">
-										<a href="/" class="btn btn-danger btn-md btn-block">HOME</a>
-									</div>
-									<div class="col-md-5" style="display: inline-block">
-										<input style="display: inline-block" type="submit" class="btn btn-primary btn-lg btn-block" value="NEXT">
+									<br> <br> <br> <br>
+									<div class="form-group row">
+										<div class="col-lg-12">
+											<input type="submit" class="btn btn-primary btn-lg btn-block"
+												value="Post review">
+										</div>
 									</div>
 								</div>
-							</div>
-						</form>
-					</div>
-					<div class="col-md-5 ml-auto">
-						<br> <br>
-
-						<div class"col-lg-12" align="center">
-							<a href="/login" class="btn btn-primary btn-lg btn-block"><b>Already
-									have an account? </b></a>
+							</form>
 						</div>
-
 					</div>
 				</div>
 			</div>
+
+
 		</div>
+		<script src="/js/jquery-3.3.1.min.js"></script>
+		<script src="/js/jquery-ui.js"></script>
+		<script src="/js/popper.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/owl.carousel.min.js"></script>
+		<script src="/js/jquery.magnific-popup.min.js"></script>
+		<script src="/js/aos.js"></script>
 
-
-	</div>
-
-	<script src="/js/jquery-3.3.1.min.js"></script>
-	<script src="/js/jquery-ui.js"></script>
-	<script src="/js/popper.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/owl.carousel.min.js"></script>
-	<script src="/js/jquery.magnific-popup.min.js"></script>
-	<script src="/js/aos.js"></script>
-
-	<script src="/js/main.js"></script>
-	<script>
-		function myFunction() {
-			location.href = "/myaccount"
-		};
-	</script>
+		<script src="/js/main.js"></script>
+		<script>
+			function myFunction() {
+				location.href = "/myaccount"
+			};
+		</script>
 </body>
 </html>

@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@
-taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 
@@ -17,6 +14,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/fonts/icomoon/style.css">
 
 <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -29,7 +28,6 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link rel="stylesheet" href="/css/aos.css">
 
 <link rel="stylesheet" href="/css/style.css">
-
 </head>
 <body>
 
@@ -135,7 +133,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 				<div class="row">
 					<div class="col-md-12 mb-0">
 						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
-							class="text-black">Sign up</strong>
+							class="text-black"><c:out value="${provider.userName }"/>'s Posts</strong>
 					</div>
 				</div>
 			</div>
@@ -143,57 +141,91 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 		<div class="site-section">
 			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<h2 class="h3 mb-3 text-black">Creating an account:</h2>
-					</div>
-					<div class="col-md-7">
-						<form action="/registerAs" method="POST">
-							<div class="p-3 p-lg-5 border">
-								<div class="form-group column">
-									<div class="col-md-10" id="error">
-										<c:if test="${not empty errorMessage }">
-											<c:forEach items="${errorMessage }" var="message">
-												<ul>
-													<li
-														style="color: red; font-weight: bold; margin: 30px 0px;"><c:out
-															value="${message}"></c:out></li>
-												</ul>
-											</c:forEach>
-										</c:if>
-									</div>
-									<div class="col-md-12">
-										<label for="c_fname" class="text-black"><b> Select User
-												Type and click on NEXT button </b><br><input type="radio" name="userType"
-											value="Customer" id="customerCheck">
-											Customer <input type="radio" name="userType" value="Provider"
-											id="providerCheck">Provider<br></label>
-									</div>
-									<br>
-									<div class="col-md-5" style="display: inline-block">
-										<a href="/" class="btn btn-danger btn-md btn-block">HOME</a>
-									</div>
-									<div class="col-md-5" style="display: inline-block">
-										<input style="display: inline-block" type="submit" class="btn btn-primary btn-lg btn-block" value="NEXT">
-									</div>
+				<div class="row mb-12">
+					<div class="col-md-12 order-2">
+
+						<div class="row">
+							<div class="col-md-12 mb-5">
+								<div class="float-md-left mb-4">
+									<h2 class="text-black h5">Movies List(<c:out
+												value="${numberOfMovies}" />)</h2>
 								</div>
 							</div>
-						</form>
-					</div>
-					<div class="col-md-5 ml-auto">
-						<br> <br>
-
-						<div class"col-lg-12" align="center">
-							<a href="/login" class="btn btn-primary btn-lg btn-block"><b>Already
-									have an account? </b></a>
 						</div>
-
+						<div class="row mb-12">
+							<c:forEach items="${movies}" var="movie">
+								<div class="col-sm-6 col-md-4 mb-4" data-aos="fade-up">
+									<div class="block-4 text-center border">
+										<figure class="block-4-image"> <a
+											href="/movie/<c:out value="${movie.id}" />"><img
+											style="width: 500px; height: 300px;"
+											src="<c:out value="${movie.imagePath}" />"
+											alt="Image placeholder" class="img-fluid"></a> </figure>
+										<div class="block-4-text p-4">
+											<h3>
+												<a href="/movie/<c:out value="${movie.id}"/>"><c:out
+														value="${movie.name}" /></a>
+											</h3>
+											<p>
+												<c:choose>
+													<c:when test="${movie.stock > 10 }">
+														<p class="d-flex color-item align-items-center">
+															<span
+																class="bg-success color d-inline-block rounded-circle mr-2"></span>
+															<span class="text-black">On stock</span>
+														</p>
+													</c:when>
+													<c:when test="${movie.stock <= 10 and movie.stock > 0 }">
+														<p class="d-flex color-item align-items-center">
+															<span
+																class="bg-warning color d-inline-block rounded-circle mr-2"></span>
+															<span class="text-black">Few left</span>
+														</p>
+													</c:when>
+													<c:when test="${movie.stock eq 0 }">
+														<p class="d-flex color-item align-items-center">
+															<span
+																class="bg-danger color d-inline-block rounded-circle mr-2"></span>
+															<span class="text-black">Not on stock</span>
+														</p>
+													</c:when>
+												</c:choose>
+											</p>
+											<security:authorize access="hasAnyRole('Customer')">
+												<c:choose>
+													<c:when test="${movie.stock > 0 }">
+														<form
+															action="/addToCart/Movie/<c:out value="${movie.id}" />">
+															<input type="radio" name="orderType" value="Rent">
+															<label for="male">Rent</label> <input type="radio"
+																name="orderType" value="Buy" checked="checked"> <label
+																for="female">Buy</label> <br> <input type="submit"
+																name="Add to Cart" value="Add to Cart">
+														</form>
+													</c:when>
+													<c:when test="${movie.stock <= 0 }">
+														<form
+															action="/addToCart/Movie/<c:out value="${movie.id}" />">
+															<input type="radio" name="orderType" value="Rent"
+																disabled> <label for="male">Rent</label> <input
+																type="radio" name="orderType" value="Buy" disabled>
+															<label for="female">Buy</label> <br> <input
+																type="submit" name="Add to Cart" value="Add to Cart"
+																disabled>
+														</form>
+													</c:when>
+												</c:choose>
+												</security:authorize>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-
+	</div>
 	</div>
 
 	<script src="/js/jquery-3.3.1.min.js"></script>

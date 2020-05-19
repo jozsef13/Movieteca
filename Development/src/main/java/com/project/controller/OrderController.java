@@ -40,7 +40,11 @@ public class OrderController {
 	@GetMapping("/order/status/{id}")
 	public ModelAndView getOrderStatusById(@PathVariable int id) {
 		ModelAndView model = new ModelAndView("orderstatus");
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Customer customer = (Customer) userDetails.getUser();
 		Order order = orderService.getOrderById(id);
+		customer.getOrders().add(order);
+		userDetails.setUser(customer);
 		model.addObject(order);
 		return model;
 	}

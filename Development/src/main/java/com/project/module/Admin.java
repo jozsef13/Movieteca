@@ -1,19 +1,19 @@
 package com.project.module;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "`admin`")
 public class Admin extends User {
-	
+
 	private int numberOfRequests = 0;
-	@OneToMany(mappedBy = "admin")
+	@OneToMany(mappedBy = "admin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Request> receivedRequests;
 
 	public Admin(int numberOfRequests, Set<Request> receivedRequests, User user) {
@@ -21,29 +21,10 @@ public class Admin extends User {
 		this.numberOfRequests = numberOfRequests;
 		this.receivedRequests = receivedRequests;
 	}
-	
-	public Request getRequestById(int id) {
-        Request returnRequest = new Request();
-        for (Request request : receivedRequests) {
-            if(request.getId() == id) {
-                returnRequest = request;
-                break;
-            }
-        }
 
-        return returnRequest;
-    }
+	public Admin() {
 
-    public List<Request> getRequestsByType(String type){
-        List<Request> returnRequests = new ArrayList<Request>();
-        for (Request request : receivedRequests) {
-            if(request.getRequestType().equals(type)) {
-                returnRequests.add(request);
-            }
-        }
-
-        return returnRequests;
-    }
+	}
 
 	public Set<Request> getReceivedRequests() {
 		return receivedRequests;
