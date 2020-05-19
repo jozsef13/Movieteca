@@ -1,7 +1,7 @@
 package com.project.module;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,8 +28,8 @@ public class Cart {
 	private Customer customer;
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "moviesFromCart", joinColumns = @JoinColumn(name = "cartId"), inverseJoinColumns = @JoinColumn(name = "movieId"))
-	private Set<Movie> moviesInCart = new LinkedHashSet<Movie>();
-	
+	private Set<Movie> moviesInCart = new HashSet<Movie>();
+
 	public Cart(int id, double totalPrice, Customer customer, Set<Movie> moviesInCart) {
 		super();
 		this.id = id;
@@ -37,13 +37,14 @@ public class Cart {
 		this.customer = customer;
 		this.moviesInCart = moviesInCart;
 	}
-	
-	public Cart() { }
 
-	public Movie getMovieFromCartById(int id){
+	public Cart() {
+	}
+
+	public Movie getMovieFromCartById(int id) {
 		Movie returnMovie = new Movie();
 		for (Movie movie : moviesInCart) {
-			if(movie.getId() == id) {
+			if (movie.getId() == id) {
 				returnMovie = movie;
 				break;
 			}
@@ -51,18 +52,18 @@ public class Cart {
 		return returnMovie;
 	}
 
-	public List<Movie> getMoviesWithBuyPriceGraterThan(double buyPrice){
+	public List<Movie> getMoviesWithBuyPriceGraterThan(double buyPrice) {
 		List<Movie> returningMovies = new ArrayList<Movie>();
-		
+
 		for (Movie movie : moviesInCart) {
-			if(movie.getBuyPrice() > buyPrice) {
+			if (movie.getBuyPrice() > buyPrice) {
 				returningMovies.add(movie);
 			}
 		}
-		
+
 		return returningMovies;
 	}
-	
+
 	public int getId() {
 		return id;
 	}

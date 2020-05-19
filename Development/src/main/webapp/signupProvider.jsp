@@ -25,7 +25,18 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link rel="stylesheet" href="/css/owl.carousel.min.css">
 <link rel="stylesheet" href="/css/owl.theme.default.min.css">
 
+<style>
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>
 <link rel="stylesheet" href="/css/aos.css">
 
 <link rel="stylesheet" href="/css/style.css">
@@ -134,8 +145,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 mb-0">
-						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
-							class="text-black">Sign up</strong>
+						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <a href="/register">Sign Up</a> <span class="mx-2 mb-0">/</span>
+						<strong class="text-black"><c:out value="${userType }"></c:out></strong>
 					</div>
 				</div>
 			</div>
@@ -148,7 +159,7 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 						<h2 class="h3 mb-3 text-black">Creating an account:</h2>
 					</div>
 					<div class="col-md-7">
-						<form action="/registerAs" method="POST">
+						<form action="/register/<c:out value="${userType}" />" method="POST">
 							<div class="p-3 p-lg-5 border">
 								<div class="form-group column">
 									<div class="col-md-10" id="error">
@@ -162,19 +173,96 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 											</c:forEach>
 										</c:if>
 									</div>
-									<div class="col-md-12">
-										<label for="c_fname" class="text-black"><b> Select User
-												Type and click on NEXT button </b><br><input type="radio" name="userType"
-											value="Customer" id="customerCheck">
-											Customer <input type="radio" name="userType" value="Provider"
-											id="providerCheck">Provider<br></label>
+									<div class="col-md-10">
+										<label for="c_fname" class="text-black"><b>
+												Company Name(This will be also the username) </b> <span
+											class="text-danger">*</span></label> <input type="text"
+											class="form-control" id="c_fname" name="userName" required>
 									</div>
-									<br>
-									<div class="col-md-5" style="display: inline-block">
-										<a href="/" class="btn btn-danger btn-md btn-block">HOME</a>
+									<div class="col-md-10">
+										<label for="c_lname" class="text-black"><b>
+												Password </b> <span class="text-danger">*</span></label> <input
+											type="password" class="form-control" id="password"
+											name="password" required>
+										<p>
+											<small><i class="icon-info-circle"></i> Must contain at least one number and one
+												letter, and at least 8 or more characters!</small>
+										</p>
 									</div>
-									<div class="col-md-5" style="display: inline-block">
-										<input style="display: inline-block" type="submit" class="btn btn-primary btn-lg btn-block" value="NEXT">
+									<div class="col-md-10">
+										<label for="c_lname" class="text-black"><b>
+												Confirm Password </b> <span class="text-danger">*</span></label> <input
+											type="password" class="form-control" id="passwordConfirm"
+											name="passwordConfirm" required>
+									</div>
+									<div class="col-md-10">
+										<label for="c_lname" class="text-black"><b>
+												Billing Last Name </b> <span class="text-danger">*</span></label> <input
+											type="text" class="form-control" id="c_lname" name="lastName" required>
+									</div>
+									<div class="col-md-10">
+										<label for="c_lname" class="text-black"><b>
+												Billing First Name </b> <span class="text-danger">*</span></label> <input
+											type="text" class="form-control" id="c_lname"
+											name="firstName" required>
+									</div>
+									<div class="col-md-10">
+										<label for="c_email" class="text-black"><b>Company
+												Email </b> <span class="text-danger">*</span></label> <input
+											type="email" class="form-control" id="c_email" name="email" required>
+									</div>
+									<div class="col-md-10">
+										<label for="c_address" class="text-black"><b>Billing
+												Address</b><span class="text-danger">*</span></label> <br> <input
+											type="text" class="form-control" id="ownState" name="state"
+											placeholder="State" required/> <input type="text"
+											class="form-control" id="ownCity" name="city"
+											placeholder="City" required/>
+									</div>
+									<div class="col-md-10">
+										<input type="text" class="form-control" id="c_address"
+											name="address" placeholder="Street name, number etc." required/>
+									</div>
+									<div class="col-md-10">
+										<label for="c_phone" class="text-black"><b>Phone
+												Number</b><span class="text-danger">*</span></label> <input type="number"
+											class="form-control" id="c_phone" name="phoneNumber" required/>
+											<p>
+											<small><i class="icon-info-circle"></i> It must start with 07 and continue with 8 digits!</small>
+										</p>
+									</div>
+									<div class="col-md-10">
+										<label for="c_paymentPlan" class="text-black"><b>Payment
+												Plan</b><span class="text-danger">*</span></label> <select
+											name="paymentPlan" class="form-control" id="plan"
+											onchange="displayStuff()" required>
+											<option value="Basic">Basic, $4.99/month</option>
+											<option value="Advanced">Advanced, $10.99/month</option>
+											<option value="Ultimate">Ultimate, 15.99/month</option>
+										</select>
+										<p id="Basic">
+											<small><i class="icon-info-circle"></i> Basic: you
+												will be able to have only 20 posts(movies) for sale/rent,
+												and a stock of 40/movie.</small>
+										</p>
+										<p id="Advanced" style="display: none">
+											<small><i class="icon-info-circle"></i> Advanced: you
+												will be able to have only 50 posts(movies) for sale/rent,
+												and a stock of 100/movie.</small>
+										</p>
+										<p id="Ultimate" style="display: none">
+											<small><i class="icon-info-circle"></i> Ultimate: you
+												will be able to have unlimited posts and unlimited stock.</small>
+										</p>
+										<br>
+										<div class="col-md-5" style="display: inline-block">
+											<a href="/register" class="btn btn-danger btn-md btn-block">BACK</a>
+										</div>
+										<div class="col-md-5"
+											style="display: inline-block; text-align: right;">
+											<input style="display: inline-block;" type="submit"
+												class="btn btn-primary btn-lg btn-block" value="SIGN UP">
+										</div>
 									</div>
 								</div>
 							</div>
@@ -209,6 +297,31 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 		function myFunction() {
 			location.href = "/myaccount"
 		};
+	</script>
+	<script type="text/javascript">
+		function displayStuff() {
+			var e = document.getElementById('plan');
+			var val = e.options[e.selectedIndex].value;
+
+			switch (val) {
+			case "Basic":
+				document.getElementById('Basic').style.display = 'block';
+				document.getElementById('Advanced').style.display = 'none';
+				document.getElementById('Ultimate').style.display = 'none';
+				break;
+			case "Advanced":
+				document.getElementById('Advanced').style.display = 'block';
+				document.getElementById('Basic').style.display = 'none';
+				document.getElementById('Ultimate').style.display = 'none';
+				break;
+			case "Ultimate":
+				document.getElementById('Ultimate').style.display = 'block';
+				document.getElementById('Basic').style.display = 'none';
+				document.getElementById('Advanced').style.display = 'none';
+				break;
+			}
+
+		}
 	</script>
 </body>
 </html>

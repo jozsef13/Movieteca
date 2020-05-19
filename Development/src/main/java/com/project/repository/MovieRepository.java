@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.project.module.Movie;
+import com.project.module.Provider;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
@@ -17,4 +18,6 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 	List<Movie> findByName(String name, PageRequest pageRequest);
 	@Query("select s from Movie s where name like %?1%")
 	List<Movie> findByName(String name);
+	
+	List<Movie> findByProvider(Provider provider);
 }

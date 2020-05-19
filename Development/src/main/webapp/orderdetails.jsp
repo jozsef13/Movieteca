@@ -206,7 +206,6 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 							<p>State: <c:out value="${order.customer.state }"></c:out></p>
 							<p>County: <c:out value="${order.customer.country }"></c:out></p>
 							<p>Phone Number: <c:out value="${order.customer.phoneNumber }"></c:out></p>
-							<p>Notes: <c:out value="${order.notes}"></c:out>
 						</div>
 					</div>
 				</div>

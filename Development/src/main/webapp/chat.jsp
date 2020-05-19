@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@
 taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="security"
@@ -29,10 +28,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link rel="stylesheet" href="/css/aos.css">
 
 <link rel="stylesheet" href="/css/style.css">
-
 </head>
 <body>
-
 	<div class="site-wrap">
 		<header class="site-navbar" role="banner">
 		<div class="site-navbar-top">
@@ -86,13 +83,13 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 											aria-expanded="false">
 											<span class="sr-only">Toggle Dropdown</span>
 										</button>
-
 										<security:authorize access="!isAuthenticated()">
 											<div class="dropdown-menu">
 												<a class="dropdown-item" href="/login">Login</a> <a
 													class="dropdown-item" href="/register">Register</a>
 											</div>
 										</security:authorize>
+
 										<security:authorize access="isAuthenticated()">
 											<div class="dropdown-menu">
 												<a class="dropdown-item" href="/myaccount">My Account</a> <a
@@ -134,8 +131,9 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 mb-0">
-						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
-							class="text-black">Sign up</strong>
+						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <a
+							href="/myaccount">My account</a> <span class="mx-2 mb-0">/</span>
+						<strong class="text-black">Chat</strong>
 					</div>
 				</div>
 			</div>
@@ -145,70 +143,98 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<h2 class="h3 mb-3 text-black">Creating an account:</h2>
+						<h2 class="h3 mb-3 text-black">Messages</h2>
 					</div>
+					<security:authentication property="principal.user.messages"
+						var="messages" />
 					<div class="col-md-7">
-						<form action="/registerAs" method="POST">
-							<div class="p-3 p-lg-5 border">
-								<div class="form-group column">
-									<div class="col-md-10" id="error">
-										<c:if test="${not empty errorMessage }">
-											<c:forEach items="${errorMessage }" var="message">
-												<ul>
-													<li
-														style="color: red; font-weight: bold; margin: 30px 0px;"><c:out
-															value="${message}"></c:out></li>
-												</ul>
+						<form action="/sendMessage/to/<c:out value="${user.id }" />"
+							method="post">
+							<div class="messaging">
+								<div class="inbox_msg">
+									<div class="mesgs">
+										<div class="msg_history">
+											<c:forEach items="${messages}" var="message">
+												<div class="outgoing_msg">
+													<div class="sent_msg">
+														<p>
+															<c:out value="${message.textMessage}" />
+														</p>
+														<span class="time_date"> <c:out
+																value="${message.sentDateTime}" /></span>
+													</div>
+												</div>
 											</c:forEach>
-										</c:if>
+											<c:forEach items="${user.messages}" var="message">
+												<div class="incoming_msg">
+													<div class="incoming_msg_img">
+														<img
+															src="https://ptetutorials.com/images/user-profile.png"
+															alt="sunil">
+													</div>
+													<div class="received_msg">
+														<div class="received_withd_msg">
+															<p>
+																<c:out value="${message.textMessage}"></c:out>
+															</p>
+															<span class="time_date"> <c:out
+																	value="${message.sentDateTime}"></c:out></span>
+														</div>
+													</div>
+												</div>
+											</c:forEach>
+										</div>
+										<div class="col-md-12">
+											<textarea name="textMessage" id="textMessage" rows="5"
+												cols="70" class="form-control"></textarea>
+										</div>
+										<div class="col-md-5">
+											<input type="submit" class="btn btn-primary btn-lg btn-block"
+												value="Send Message">
+										</div>
 									</div>
-									<div class="col-md-12">
-										<label for="c_fname" class="text-black"><b> Select User
-												Type and click on NEXT button </b><br><input type="radio" name="userType"
-											value="Customer" id="customerCheck">
-											Customer <input type="radio" name="userType" value="Provider"
-											id="providerCheck">Provider<br></label>
-									</div>
-									<br>
-									<div class="col-md-5" style="display: inline-block">
-										<a href="/" class="btn btn-danger btn-md btn-block">HOME</a>
-									</div>
-									<div class="col-md-5" style="display: inline-block">
-										<input style="display: inline-block" type="submit" class="btn btn-primary btn-lg btn-block" value="NEXT">
-									</div>
+
 								</div>
 							</div>
 						</form>
+
 					</div>
+
 					<div class="col-md-5 ml-auto">
-						<br> <br>
+						<div class="row">
+							<div class="col-md-10">
+								<img style="width: 300px; height: 300px;"
+									src="${user.profilePicture }" alt="Image placeholder"
+									class="img-fluid">
 
-						<div class"col-lg-12" align="center">
-							<a href="/login" class="btn btn-primary btn-lg btn-block"><b>Already
-									have an account? </b></a>
+								<div class="col-md-10">
+									<u><h3 class="text-black">
+											Username: ${user.userName }
+											</h2></u>
+									<p>First Name: ${user.firstName }</p>
+									<p>Last Name: ${user.lastName }</p>
+								</div>
+							</div>
 						</div>
-
 					</div>
+
 				</div>
 			</div>
+
 		</div>
+		<script src="/js/jquery-3.3.1.min.js"></script>
+		<script src="/js/jquery-ui.js"></script>
+		<script src="/js/popper.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/owl.carousel.min.js"></script>
+		<script src="/js/jquery.magnific-popup.min.js"></script>
+		<script src="/js/aos.js"></script>
 
-
-	</div>
-
-	<script src="/js/jquery-3.3.1.min.js"></script>
-	<script src="/js/jquery-ui.js"></script>
-	<script src="/js/popper.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/owl.carousel.min.js"></script>
-	<script src="/js/jquery.magnific-popup.min.js"></script>
-	<script src="/js/aos.js"></script>
-
-	<script src="/js/main.js"></script>
-	<script>
-		function myFunction() {
-			location.href = "/myaccount"
-		};
-	</script>
+		<script src="/js/main.js"></script>
+		<script>
+			function myFunction() {
+				location.href = "/myaccount"
+			};
+		</script>
 </body>
 </html>

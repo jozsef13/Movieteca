@@ -274,15 +274,20 @@ public class Movie {
 		return nrOfReviews;
 	}
 
-	public void setNrOfReviews(int nrOfReviews) {
-		this.nrOfReviews = nrOfReviews;
+	public void setNrOfReviews() {
+		this.nrOfReviews = reviewsReceived.size();
 	}
 
 	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(double averageRating) {
-		this.averageRating = averageRating;
+	public void setAverageRating() {
+		double sum = 0;
+		for (MovieReview movieReview : reviewsReceived) {
+			sum += movieReview.getRating();
+		}
+		
+		averageRating = sum/reviewsReceived.size();
 	}
 }

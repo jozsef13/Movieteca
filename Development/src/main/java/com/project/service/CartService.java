@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.project.module.Cart;
 import com.project.module.Customer;
 import com.project.module.Movie;
-import com.project.module.MyUserDetails;
 import com.project.repository.CartRepository;
 import com.project.repository.CustomerRepository;
 
@@ -18,11 +17,13 @@ public class CartService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	public Cart addMovieToCart(Movie movie, String type, int quntityInt, MyUserDetails userDetails) {
-		Customer customer = (Customer) userDetails.getUser();
-		if (customer.getCart() == null) {
-			Cart cart = createCart();
-			cart.setCustomer(customer);
+	public Cart addMovieToCart(Movie movie, String type, int quntityInt, Customer customer) {
+		int cartId = 0;
+		if(customer.getCart() != null) {
+			 cartId = customer.getCart().getId();
+		}
+		if (cartId == 0) {
+			Cart cart = createCart(customer);
 			Movie cartMovie = movie;
 			cartMovie.setOrderType(type);
 			cartMovie.setOrderQuantity(quntityInt);
@@ -33,15 +34,16 @@ public class CartService {
 				cart.setTotalPrice(cart.getTotalPrice() + (quntityInt * movie.getRentPrice()));
 			}
 			customer.setCart(cart);
-			customerRepository.save(customer);
 			cartRepository.save(cart);
+			customerRepository.save(customer);
 			return cart;
 		} else {
-			Cart cart = customer.getCart();
+			Cart cart = cartRepository.getOne(cartId);
 			Movie cartMovie = movie;
 			cartMovie.setOrderType(type);
 			cartMovie.setOrderQuantity(quntityInt);
 			cart.getMoviesInCart().add(cartMovie);
+			cartMovie.getCarts().add(cart);
 			if (type.equals("Buy")) {
 				cart.setTotalPrice(cart.getTotalPrice() + (quntityInt * movie.getBuyPrice()));
 			} else if (type.equals("Rent")) {
@@ -58,9 +60,9 @@ public class CartService {
 		return cartRepository.findById(id).orElse(null);
 	}
 
-	public Cart createCart() {
+	public Cart createCart(Customer customer) {
 		Cart cart = new Cart();
-		cartRepository.save(cart);
+		cart.setCustomer(customer);
 		return cart;
 	}
 
@@ -70,12 +72,21 @@ public class CartService {
 		} else if (movie.getOrderType().equals("Rent")) {
 			cart.setTotalPrice(cart.getTotalPrice() - (movie.getOrderQuantity() * movie.getRentPrice()));
 		}
-
-		cart.getMoviesInCart().remove(movie);
+		
+		System.out.println(cart + " " + cart.getMoviesInCart());
+		for (Movie movieInCart : cart.getMoviesInCart()) {
+			if(movieInCart.getId() == movie.getId()) {
+				cart.getMoviesInCart().remove(movieInCart);
+				break;
+			}
+		}
+		
+		
 		if (cart.getMoviesInCart().isEmpty()) {
 			cart.setTotalPrice(0);
 		}
-		cartRepository.save(cart);
+		
+		cartRepository.saveAndFlush(cart);
 		return cart;
 	}
 
@@ -85,7 +96,8 @@ public class CartService {
 		cartRepository.delete(cart);
 	}
 
-	public Cart update(Movie movie, Cart cart, int quantity) {
+	public Cart update(Movie movie, int cartId, int quantity) {
+		Cart cart = cartRepository.getOne(cartId);
 		if (quantity <= 0) {
 			deleteMovieFromCart(movie, cart);
 		} else {
@@ -97,7 +109,7 @@ public class CartService {
 
 			movie.setOrderQuantity(quantity);
 			cart.getMoviesInCart().add(movie);
-
+			
 			if (movie.getOrderType().equals("Buy")) {
 				cart.setTotalPrice(cart.getTotalPrice() + (movie.getOrderQuantity() * movie.getBuyPrice()));
 			} else if (movie.getOrderType().equals("Rent")) {
@@ -108,7 +120,8 @@ public class CartService {
 		return cartRepository.save(cart);
 	}
 
-	public Cart updateType(Movie movie, Cart cart, String type) {
+	public Cart updateType(Movie movie, int cartId, String type) {
+		Cart cart = cartRepository.getOne(cartId);
 		if (movie.getOrderType().equals("Buy")) {
 			cart.setTotalPrice(cart.getTotalPrice() - (movie.getOrderQuantity() * movie.getBuyPrice()));
 		} else if (movie.getOrderType().equals("Rent")) {
@@ -123,7 +136,7 @@ public class CartService {
 		} else if (movie.getOrderType().equals("Rent")) {
 			cart.setTotalPrice(cart.getTotalPrice() + (movie.getOrderQuantity() * movie.getRentPrice()));
 		}
-		
-		return cartRepository.save(cart);
+		cartRepository.save(cart);
+		return cart;
 	}
 }

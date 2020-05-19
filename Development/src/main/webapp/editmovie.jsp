@@ -26,36 +26,47 @@
 <link rel="stylesheet" href="/css/aos.css">
 
 <link rel="stylesheet" href="/css/style.css">
+<style>
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>
 </head>
 <body>
 
 	<div class="site-wrap">
 		<header class="site-navbar" role="banner">
-	<div class="site-navbar-top">
-		<div class="container">
-			<div class="row align-items-center">
+		<div class="site-navbar-top">
+			<div class="container">
+				<div class="row align-items-center">
 
-				<div
-					class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
-					<div class="site-logo">
-						<a href="/" class="js-logo-clone">MOVIETECA</a>
+					<div
+						class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+						<div class="site-logo">
+							<a href="/" class="js-logo-clone">MOVIETECA</a>
+						</div>
 					</div>
-				</div>
 
-				<div class="col-7 col-md-7 order-3 order-md-3 text-right">
-					<div class="site-top-icons">
-						<ul>
-							<security:authorize access="hasAnyRole('Customer')">
+					<div class="col-7 col-md-7 order-3 order-md-3 text-right">
+						<div class="site-top-icons">
+							<ul>
+								<security:authorize access="hasAnyRole('Customer')">
 									<security:authentication property="principal.user.cart"
 										var="cart" />
 									<li><c:choose>
 											<c:when test="${empty cart}">
-											<a href="#" class="site-cart">
-												<button class="btn btn-secondary btn-sm site-cart">
-													<span class="icon icon-shopping_cart"></span> <span
-														class="count"> 0 </span>
-												</button>
+												<a href="#" class="site-cart">
+													<button class="btn btn-secondary btn-sm site-cart">
+														<span class="icon icon-shopping_cart"></span> <span
+															class="count"> 0 </span>
+													</button>
 												</a>
 											</c:when>
 											<c:when test="${not empty cart}">
@@ -71,8 +82,8 @@
 											</c:when>
 										</c:choose></li>
 								</security:authorize>
-							<li>
-								<div class="btn-group">
+								<li>
+									<div class="btn-group">
 										<button class="btn btn-secondary btn-sm"
 											onclick="myFunction()" type="button">
 											<span class="icon icon-person"></span>
@@ -92,130 +103,259 @@
 										</security:authorize>
 										<security:authorize access="isAuthenticated()">
 											<div class="dropdown-menu">
-												<a class="dropdown-item" href="/myaccount">My Account</a> 
-												<a class="dropdown-item" href="/logout">Logout</a>
+												<a class="dropdown-item" href="/myaccount">My Account</a> <a
+													class="dropdown-item" href="/logout">Logout</a>
 											</div>
 										</security:authorize>
 									</div>
-							</li>
-							<li class="d-inline-block d-md-none ml-md-0"><a href="#"
-								class="site-menu-toggle js-menu-toggle"><span
-									class="icon-menu"></span></a></li>
-						</ul>
+								</li>
+								<li class="d-inline-block d-md-none ml-md-0"><a href="#"
+									class="site-menu-toggle js-menu-toggle"><span
+										class="icon-menu"></span></a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<nav class="site-navigation text-right text-md-center" role="navigation">
-	<div class="container" style="margin-left: 300px">
-		<ul class="site-menu js-clone-nav d-none d-md-block">
-			<li class="nav-item"><a href="/">Home</a></li>
-			<li class="nav-item"><a href="/movies">Movies</a></li>
-			<li class="nav-item"><a href="/contact">Contact</a></li>
-			<li
-				class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-				<form action="/movies/search" class="site-block-top-search">
-					<span class="icon icon-search2"></span> <input type="text"
-						class="form-control border-0" placeholder="Search.."
-						name="nameString">
-				</form>
-			</li>
-		</ul>
-	</div>
-	</nav> </header>
+		<nav class="site-navigation text-right text-md-center"
+			role="navigation">
+		<div class="container" style="margin-left: 300px">
+			<ul class="site-menu js-clone-nav d-none d-md-block">
+				<li class="nav-item"><a href="/">Home</a></li>
+				<li class="nav-item"><a href="/movies">Movies</a></li>
+				<li class="nav-item"><a href="/contact">Contact</a></li>
+				<li
+					class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+					<form action="/movies/search" class="site-block-top-search">
+						<span class="icon icon-search2"></span> <input type="text"
+							class="form-control border-0" placeholder="Search.."
+							name="nameString">
+					</form>
+				</li>
+			</ul>
+		</div>
+		</nav> </header>
 
 		<div class="bg-light py-3">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 mb-0">
-						<a href="/">Movies</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Add Movie</strong>
+						<a href="/">Movies</a> <span class="mx-2 mb-0">/</span> <strong
+							class="text-black">Add Movie</strong>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="site-section">
 			<div class="container">
-				<form action="/addMovie" method="post" enctype = "multipart/form-data">
-					<div class="row">
-						<div class="col-md-6">
-							<p>
-								<b>Movie Title:</b> <input type="text" class="form-control"
-									id="c_fname" name="name">
-							</p>
-							<p>
-								<b>Upload Image:</b> <input type="file" class="form-control"
-									id="img" name="img">
-							</p>
-							<p>
-								<b>Release Date:</b> <input type="date" class="form-control"
-									id="c_fname" name="releaseDate">
-							</p>
-							<p>
-								<b>Running Time:</b> <input type="text" class="form-control"
-									id="c_fname" name="playTime">
-							</p>
-							<p>
-								<b>Genre:</b> <input type="text" class="form-control" id="c_fname"
-									name="genre">
-							</p>
-							<p>
-								<b>Directed By:</b> <input type="text" class="form-control"
-									id="c_fname" name="directors">
-							</p>
-							<p>
-								<b>Produced By:</b> <input type="text" class="form-control"
-									id="c_fname" name="witers">
-							</p>
-							<p>
-								<b>Description:</b> <input type="text" class="form-control"
-									id="c_fname" name="description">
-							</p>
-							<p>
-								<b>Imdb:</b> <input type="text" class="form-control" id="c_fname"
-									name="iMDbRating">
-							</p>
-							<p>
-								<b>Starring:</b> <input type="text" class="form-control" id="c_fname"
-									name="mainActors">
-							</p>
-							<p>
-								<b>Trailer Link:</b> <input type="text" class="form-control"
-									id="c_fname" name="trailerLink">
-							</p>
-							<p>
-								<b>Rent Price:</b> <input type="text" class="form-control" id="c_fname"
-									name="rentPrice">
-							</p>
-							<p>
-								<b>Buy Price:</b> <input type="text" class="form-control" id="c_fname"
-									name="buyPrice">
-							</p>
+				<c:if test="${empty movie }">
+					<form action="/addMovie" method="post"
+						enctype="multipart/form-data">
+						<div class="row">
+							<div class="col-md-6">
+								<p>
+									<b>Movie Title:</b> <input type="text" class="form-control"
+										id="c_fname" name="name">
+								</p>
+								<p>
+									<b>Upload Image:</b> <input type="file" class="form-control"
+										id="img" name="img">
+								<p>
+									<small><i class="icon-info-circle"></i> Cover Photo</small>
+								</p>
+								</p>
+								<p>
+									<b>Release Date:</b> <input type="date" class="form-control"
+										id="c_fname" name="releaseDate">
+								</p>
+								<p>
+									<b>Running Time:</b> <input type="text" class="form-control"
+										id="c_fname" name="playTime">
+								<p>
+									<small><i class="icon-info-circle"></i> Write in text
+										like this "(0-9)h (0-5)(0-9)min"!</small>
+								</p>
+								</p>
+								<p>
+									<b>Genre:</b> <input type="text" class="form-control"
+										id="c_fname" name="genre">
+								<p>
+									<small><i class="icon-info-circle"></i> Only one genre
+										as the main genre!</small>
+								</p>
+								</p>
+								<p>
+									<b>Directed By:</b> <input type="text" class="form-control"
+										id="c_fname" name="directors">
+								</p>
+								<p>
+									<b>Produced By:</b> <input type="text" class="form-control"
+										id="c_fname" name="witers">
+								</p>
+								<p>
+									<b>Description:</b> <input type="text" class="form-control"
+										id="c_fname" name="description">
+								</p>
+								<p>
+									<b>Imdb:</b> <input type="number" class="form-control"
+										id="c_fname" name="iMDbRating" step=".1">
+								<p>
+									<small><i class="icon-info-circle"></i> The rating from
+										iMDb website!</small>
+								</p>
+								</p>
+								<p>
+									<b>Starring:</b> <input type="text" class="form-control"
+										id="c_fname" name="mainActors">
+								<p>
+									<small><i class="icon-info-circle"></i> Write just the
+										main actors!</small>
+								</p>
+								</p>
+								<p>
+									<b>Trailer Link:</b> <input type="text" class="form-control"
+										id="c_fname" name="trailerLink">
+								<p>
+									<small><i class="icon-info-circle"></i> Must be a valid
+										link!</small>
+								</p>
+								</p>
+								<p>
+									<b>Rent Price:</b> <input type="number" class="form-control"
+										id="c_fname" name="rentPrice" step="0.01">
+								<p>
+									<small><i class="icon-info-circle"></i> Must be smaller
+										than buy price!</small>
+								</p>
+								</p>
+								<p>
+									<b>Buy Price:</b> <input type="number" class="form-control"
+										id="c_fname" name="buyPrice" step="0.01">
+								<p>
+									<small><i class="icon-info-circle"></i> Must be greater
+										than rent price!</small>
+								</p>
+								</p>
 
-							<div class="mb-5">
+								<div class="mb-5">
+									<b>Stock:</b>
+									<div class="input-group mb-3" style="max-width: 120px;">
+										<div class="input-group-prepend">
+											<button class="btn btn-outline-primary js-btn-minus"
+												type="button">&minus;</button>
+										</div>
+										<input type="number" class="form-control text-center"
+											value="1" placeholder=""
+											aria-label="Example text with button addon"
+											aria-describedby="button-addon1" name="stock">
+										<div class="input-group-append">
+											<button class="btn btn-outline-primary js-btn-plus"
+												type="button">&plus;</button>
+										</div>
 
-								<b>Stock:</b>
-								<div class="input-group mb-3" style="max-width: 120px;">
-									<div class="input-group-prepend">
-										<button class="btn btn-outline-primary js-btn-minus"
-											type="button">&minus;</button>
 									</div>
-									<input type="text" class="form-control text-center" value="1"
-										placeholder="" aria-label="Example text with button addon"
-										aria-describedby="button-addon1" name="stock">
-									<div class="input-group-append">
-										<button class="btn btn-outline-primary js-btn-plus"
-											type="button">&plus;</button>
-									</div>
+									<p>
+										<small><i class="icon-info-circle"></i> Depending on
+											the plan, write how many of this movie you want to sell/rent!</small>
+									</p>
+
 								</div>
-								<input type="submit" class="buy-now btn btn-sm btn-primary"
-									value="Add Movie">
+
+								<security:authorize access="hasRole('Provider')">
+									<security:authentication property="principal.user.permission"
+										var="permission" />
+									<c:choose>
+										<c:when test="${permission eq false }">
+											<input style="display: inline-block;" type="submit"
+												class="btn btn-primary btn-lg btn-block" value="Add movie"
+												disabled="disabled">
+											<p>
+												<small><i class="icon-info-circle"></i> If you want
+													to post a movie, you have to go to the <a href="/contact">Contact</a> page and ask
+													permission for this by sending a request with the title
+													"Add Movie" and giving all the details about the movie. The
+													requests will be further approved or denied!</small>
+											</p>
+										</c:when>
+										<c:otherwise>
+											<input style="display: inline-block;" type="submit"
+												class="btn btn-primary btn-lg btn-block" value="Add movie">
+										</c:otherwise>
+									</c:choose>
+								</security:authorize>
+								<security:authorize access="hasRole('Admin')">
+									<input style="display: inline-block;" type="submit"
+										class="btn btn-primary btn-lg btn-block" value="Add movie">
+								</security:authorize>
 							</div>
 						</div>
+					</form>
+				</c:if>
+				<c:if test="${not empty movie }">
+					<form action="/movie/edit/<c:out value="${movie.id }"/>"
+						method="post" enctype="multipart/form-data">
+						<div class="row">
+							<div class="col-md-6">
+								<p>
+									<b>Rent Price:</b> <input type="text" class="form-control"
+										id="c_fname" name="rentPrice" value="${movie.rentPrice }">
+								</p>
+								<p>
+									<b>Buy Price:</b> <input type="text" class="form-control"
+										id="c_fname" name="buyPrice" value="${movie.buyPrice }">
+								</p>
 
-					</div>
-				</form>
+								<div class="mb-5">
+
+									<b>Stock:</b>
+									<div class="input-group mb-3" style="max-width: 120px;">
+										<div class="input-group-prepend">
+											<button class="btn btn-outline-primary js-btn-minus"
+												type="button">&minus;</button>
+										</div>
+										<input type="text" class="form-control text-center"
+											placeholder="" aria-label="Example text with button addon"
+											aria-describedby="button-addon1" name="stock"
+											value="${movie.stock}">
+										<div class="input-group-append">
+											<button class="btn btn-outline-primary js-btn-plus"
+												type="button">&plus;</button>
+										</div>
+									</div>
+
+									<div class="col-md-5" style="display: inline-block">
+										<a href="/movie/<c:out value="${movie.id }"/>"
+											class="btn btn-danger btn-md btn-block">BACK</a>
+									</div>
+									<div class="col-md-5"
+										style="display: inline-block; text-align: right;">
+										<security:authorize access="hasRole('Provider')">
+											<security:authentication property="principal.user.permission"
+												var="permission" />
+											<c:choose>
+												<c:when test="${permission eq false }">
+													<input style="display: inline-block;" type="submit"
+														class="btn btn-primary btn-lg btn-block" value="EDIT"
+														disabled="disabled">
+												</c:when>
+												<c:otherwise>
+													<input style="display: inline-block;" type="submit"
+														class="btn btn-primary btn-lg btn-block" value="EDIT">
+												</c:otherwise>
+											</c:choose>
+										</security:authorize>
+										<security:authorize access="hasRole('Admin')">
+											<input style="display: inline-block;" type="submit"
+												class="btn btn-primary btn-lg btn-block" value="EDIT">
+										</security:authorize>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</c:if>
 			</div>
 		</div>
 
@@ -231,7 +371,7 @@
 	<script src="/js/aos.js"></script>
 
 	<script src="/js/main.js"></script>
-<script>
+	<script>
 		function myFunction() {
 			location.href = "/myaccount"
 		};

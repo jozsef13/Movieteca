@@ -1,10 +1,11 @@
 package com.project.module;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -20,17 +21,51 @@ public class Provider extends User {
 	private double averageRating = 0;
 	private int nrOfReviews = 0;
 	private int nrRequestSent = 0;
-	@OneToMany(mappedBy = "provider")
+	@Column(columnDefinition = "bit default 0")
+	private boolean permission;
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Request> requestsSent;
-	@OneToMany(mappedBy = "provider")
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<ProviderReview> receivedReviews;
-	@OneToMany(mappedBy = "provider")
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Movie> moviesPosted;
 	@ManyToOne
 	@JoinColumn(name = "planId", nullable = false)
 	private PaymentPlan paymentPlan;
-	@OneToMany(mappedBy = "provider")
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REFRESH,
+			CascadeType.REMOVE }, orphanRemoval = true)
 	private Set<Message> messages;
+
+	public Provider(User user, int nrMoviesSold, int nrMoviesRented, int nrActivePosts, double averageRating,
+			int nrOfReviews, int nrRequestSent, boolean permission, Set<Request> requestsSent,
+			Set<ProviderReview> receivedReviews, Set<Movie> moviesPosted, PaymentPlan paymentPlan,
+			Set<Message> messages) {
+		super(user);
+		this.nrMoviesSold = nrMoviesSold;
+		this.nrMoviesRented = nrMoviesRented;
+		this.nrActivePosts = nrActivePosts;
+		this.averageRating = averageRating;
+		this.nrOfReviews = nrOfReviews;
+		this.nrRequestSent = nrRequestSent;
+		this.permission = permission;
+		this.requestsSent = requestsSent;
+		this.receivedReviews = receivedReviews;
+		this.moviesPosted = moviesPosted;
+		this.paymentPlan = paymentPlan;
+		this.messages = messages;
+	}
+
+	public Provider() {
+
+	}
+
+	public boolean isPermission() {
+		return permission;
+	}
+
+	public void setPermission(boolean permission) {
+		this.permission = permission;
+	}
 
 	public Set<ProviderReview> getReceivedReviews() {
 		return receivedReviews;
@@ -86,7 +121,7 @@ public class Provider extends User {
 
 	public void setNrActivePosts() {
 		for (Movie movie : moviesPosted) {
-			if(movie.getStock() > 0) {
+			if (movie.getStock() > 0) {
 				nrActivePosts++;
 			}
 		}
@@ -99,9 +134,9 @@ public class Provider extends User {
 	public void setAverageRating() {
 		double sum = 0;
 		for (ProviderReview review : receivedReviews) {
-			sum  += review.getRating();
+			sum += review.getRating();
 		}
-		this.averageRating = sum/receivedReviews.size();
+		this.averageRating = sum / receivedReviews.size();
 	}
 
 	public int getNrOfReviews() {

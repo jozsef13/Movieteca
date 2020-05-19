@@ -142,8 +142,20 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 		<security:authorize access="isAuthenticated()">
 			<div class="site-section">
 				<div class="container">
-					<div class="row">
+					<c:if test="${not empty errorMessage }">
+						<div class="row mb-5" id="error">
+							<div class="col-md-12">
+								<div class="border p-4 rounded" role="alert"
+									style="text-align: center">
+									<p>
+										<c:out value="${errorMessage }"></c:out>
+									</p>
+								</div>
+							</div>
 
+						</div>
+					</c:if>
+					<div class="row">
 						<security:authentication property="principal.user.profilePicture"
 							var="picture" />
 						<div class="col-md-6">
@@ -211,116 +223,323 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 								Gender:
 								<security:authentication property="principal.user.sex" />
 							</p>
-
-
+							<security:authorize access="hasAnyRole('Provider')">
+								<p>
+									Payment Plan:
+									<security:authentication
+										property="principal.user.paymentPlan.planType" />
+								</p>
+							</security:authorize>
 						</div>
-
 					</div>
-
 					<br>
-
 					<p>
 						<a href="/editProfile" class="buy-now btn btn-sm btn-primary">Edit
 							profile</a>
 						<security:authorize access="hasAnyRole('Admin')">
-							<a href="/editmovielist.jsp"
-								class="buy-now btn btn-sm btn-primary">Edit movie list</a>
+							<a href="/movies/edit" class="buy-now btn btn-sm btn-primary">Edit
+								movie list</a>
 						</security:authorize>
-						<security:authorize access="hasAnyRole('Provider', 'Admin')">
-							<a href="/movies/provider/<security:authentication property="principal.user.id"/>" class="buy-now btn btn-sm btn-primary">Edit posts</a>
+						<security:authorize access="hasAnyRole('Provider')">
+							<a
+								href="/movies/provider/<security:authentication property="principal.user.id"/>"
+								class="buy-now btn btn-sm btn-primary">Edit posts</a>
 						</security:authorize>
-					</p>
 
+						<a
+							href="/user/delete/<security:authentication property="principal.user.id"/>"
+							class="buy-now btn btn-sm btn-danger">Delete account</a>
+					</p>
 				</div>
 				<security:authorize access="hasAnyRole('Customer')">
-				<security:authentication property="principal.user.orders" var="orders" />
-				<security:authentication property="principal.user.messages" var="messages" />
-				<security:authentication property="principal.user.providerReviewsAdded" var="providerReviews" />
-				<security:authentication property="principal.user.movieReviewsAdded" var="movieReviews" />
-				<div class="container">
-					<div class="row">
-						<div class="col-md-4">
-							<div class="panel-group" id="accordion-alt3">
-								<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
-								<div class="panel">
-									<!-- Panel heading -->
-									<div class="panel-heading">
-										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#accordion-alt3"
-												href="#collapseOne-alt3"> <i class="fa fa-angle-right"></i>
-												Orders(<c:out value="${orders.size()}"></c:out>)
-											</a>
-										</h4>
-									</div>
-									<div id="collapseOne-alt3" class="panel-collapse collapse">
-										<div class="panel-body">
-											<ul>
-												<c:forEach items="${orders}" var="order">
-													<li><a href="/order/status/<c:out value="${order.id }"/>">Order #<c:out value="${order.id}" />, <c:out value="${order.status}" /></a></li>
-												</c:forEach>
-											</ul>
+					<security:authentication property="principal.user.orders"
+						var="orders" />
+						<security:authentication property="principal.user.requestsSent"
+						var="requests" />
+					<security:authentication property="principal.user.messages"
+						var="messages" />
+					<security:authentication
+						property="principal.user.providerReviewsAdded"
+						var="providerReviews" />
+					<security:authentication
+						property="principal.user.movieReviewsAdded" var="movieReviews" />
+					<div class="container">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseOne-alt3"> <i class="fa fa-angle-right"></i>
+													Orders(<c:out value="${orders.size()}"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseOne-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${orders}" var="order">
+														<li><a
+															href="/order/status/<c:out value="${order.id }"/>">Order
+																#<c:out value="${order.id}" />, <c:out
+																	value="${order.status}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
 
-						<div class="col-md-4">
-							<div class="panel-group" id="accordion-alt3">
-								<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
-								<div class="panel">
-									<!-- Panel heading -->
-									<div class="panel-heading">
-										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#accordion-alt3"
-												href="#collapseTwo-alt3"> <i class="fa fa-angle-right"></i>
-												Reviews(<c:out value="${providerReviews.size() + movieReviews.size()}"></c:out>)
-											</a>
-										</h4>
-									</div>
-									<div id="collapseTwo-alt3" class="panel-collapse collapse">
-										<div class="panel-body">
-											<ul>
-												<c:forEach items="${providerReviews}" var="providerReview">
-													<li><a href="/order/status/<c:out value="${order.id }"/>">Review #<c:out value="${providerReview.id}" />, <c:out value="${providerReview.provider.userName}" /></a></li>
-												</c:forEach>
-												<c:forEach items="${movieReviews}" var="movieReview">
-													<li><a href="/order/status/<c:out value="${order.id }"/>">Review #<c:out value="${movieReview.id}" />, <c:out value="${movieReview.movie.name}" /></a></li>
-												</c:forEach>
-											</ul>
+							<div class="col-md-3">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseTwo-alt3"> <i class="fa fa-angle-right"></i>
+													Reviews(<c:out
+														value="${providerReviews.size() + movieReviews.size()}"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseTwo-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${providerReviews}" var="providerReview">
+														<li><a
+															href="/user/<c:out value="${providerReview.provider.id }"/>">Review
+																#<c:out value="${providerReview.id}" /> for <c:out
+																	value="${providerReview.provider.userName}" />
+														</a></li>
+													</c:forEach>
+													<c:forEach items="${movieReviews}" var="movieReview">
+														<li><a
+															href="/movie/<c:out value="${movieReview.movie.id }"/>">Review
+																#<c:out value="${movieReview.id}" /> for <c:out
+																	value="${movieReview.movie.name}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
 
-						<div class="col-md-4">
-							<div class="panel-group" id="accordion-alt3">
-								<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
-								<div class="panel">
-									<!-- Panel heading -->
-									<div class="panel-heading">
-										<h4 class="panel-title">
-											<a data-toggle="collapse" data-parent="#accordion-alt3"
-												href="#collapseThree-alt3"> <i class="fa fa-angle-right"></i>
-												Messages(<c:out value="${messages.size() }"></c:out>)
-											</a>
-										</h4>
+							<div class="col-md-3">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseThree-alt3"> <i
+													class="fa fa-angle-right"></i> Messages(<c:out
+														value="${messages.size() }"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseThree-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${messages}" var="message">
+														<li><a
+															href="/sendMessage/<c:out value="${message.provider.id }"/>">Message
+																#<c:out value="${message.id}" />, <c:out
+																	value="${message.provider.userName}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
 									</div>
-									<div id="collapseThree-alt3" class="panel-collapse collapse">
-										<div class="panel-body">
-											<ul>
-												<c:forEach items="${messages}" var="message">
-													<li><a href="/order/status/<c:out value="${order.id }"/>">Conversation #<c:out value="${message.id}" />, <c:out value="${message.provider.userName}" /></a></li>
-												</c:forEach>
-											</ul>
+								</div>
+							</div>
+							
+							<div class="col-md-3">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseFour-alt3"> <i
+													class="fa fa-angle-right"></i> Requests(<c:out
+														value="${requests.size() }"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseFour-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${requests}" var="request">
+														<li><a
+															href="/request/<c:out value="${request.id }"/>">Request
+																#<c:out value="${request.id}" />, <c:out
+																	value="${request.status}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</security:authorize>
+
+
+				<security:authorize access="hasAnyRole('Provider')">
+					<security:authentication property="principal.user.requestsSent"
+						var="requests" />
+					<security:authentication property="principal.user.messages"
+						var="messages" />
+					<security:authentication property="principal.user.receivedReviews"
+						var="reviews" />
+					<div class="container">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseOne-alt3"> <i class="fa fa-angle-right"></i>
+													Requests(<c:out value="${requests.size()}"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseOne-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${requests}" var="request">
+														<li><a
+															href="/request/<c:out value="${request.id }"/>">Request
+																#<c:out value="${request.id}" />, <c:out
+																	value="${request.status}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseTwo-alt3"> <i class="fa fa-angle-right"></i>
+													Reviews(<c:out value="${reviews.size()}"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseTwo-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${reviews}" var="review">
+														<li><a
+															href="/user/<c:out value="${review.provider.id }"/>">Review
+																#<c:out value="${review.id}" /> for <c:out
+																	value="${review.customer.userName}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseThree-alt3"> <i
+													class="fa fa-angle-right"></i> Messages(<c:out
+														value="${messages.size() }"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseThree-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${messages}" var="message">
+														<li><a
+															href="/sendMessage/<c:out value="${message.customer.id }"/>">Conversation
+																#<c:out value="${message.id}" />, <c:out
+																	value="${message.customer.userName}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</security:authorize>
+
+
+
+				<security:authorize access="hasAnyRole('Admin')">
+					<security:authentication property="principal.user.receivedRequests"
+						var="requests" />
+					<div class="container">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="panel-group" id="accordion-alt3">
+									<!-- Panel. Use "panel-XXX" class for different colors. Replace "XXX" with color. -->
+									<div class="panel">
+										<!-- Panel heading -->
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion-alt3"
+													href="#collapseOne-alt3"> <i class="fa fa-angle-right"></i>
+													Requests Received(<c:out value="${requests.size()}"></c:out>)
+												</a>
+											</h4>
+										</div>
+										<div id="collapseOne-alt3" class="panel-collapse collapse">
+											<div class="panel-body">
+												<ul>
+													<c:forEach items="${requests}" var="request">
+														<li><a
+															href="/request/<c:out value="${request.id }"/>">Order
+																#<c:out value="${request.id}" />, <c:out
+																	value="${request.status}" />
+														</a></li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</security:authorize>
 			</div>
 		</security:authorize>
@@ -337,11 +556,17 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 	<script src="/js/main.js"></script>
 
-<script>
+	<script>
 		function myFunction() {
 			location.href = "/myaccount"
 		};
 	</script>
+	<script>
+		var fade_out = function() {
+			$("#error").fadeOut().empty();
+		}
 
+		setTimeout(fade_out, 5000);
+	</script>
 </body>
 </html>
