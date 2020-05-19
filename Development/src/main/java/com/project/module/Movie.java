@@ -52,39 +52,39 @@ public class Movie {
 	private Set<Order> orders;
 	
 	public Movie(int id, String name, int stock, String genre, String mainActors, String witers, String directors,
-            String playTime, double rating, double iMDbRating, String description, String trailerLink,
-            String releaseDate, int nrOfReviews, double averageRating, double buyPrice, double rentPrice,
-            String imagePath, String orderType, int orderQuantity, String returningDate, Provider provider,
-            Set<MovieReview> reviewsReceived, Set<Cart> carts, Set<Order> orders) {
-        this.id = id;
-        this.name = name;
-        this.stock = stock;
-        this.genre = genre;
-        this.mainActors = mainActors;
-        this.witers = witers;
-        this.directors = directors;
-        this.playTime = playTime;
-        this.rating = rating;
-        this.iMDbRating = iMDbRating;
-        this.description = description;
-        this.trailerLink = trailerLink;
-        this.releaseDate = releaseDate;
-        this.nrOfReviews = nrOfReviews;
-        this.averageRating = averageRating;
-        this.buyPrice = buyPrice;
-        this.rentPrice = rentPrice;
-        this.imagePath = imagePath;
-        this.orderType = orderType;
-        this.orderQuantity = orderQuantity;
-        this.returningDate = returningDate;
-        this.provider = provider;
-        this.reviewsReceived = new HashSet<MovieReview>();
-        this.carts = new HashSet<Cart>();
-        this.orders = new HashSet<Order>();
-    }
+			String playTime, double rating, double iMDbRating, String description, String trailerLink,
+			String releaseDate, int nrOfReviews, double averageRating, double buyPrice, double rentPrice,
+			String imagePath, String orderType, int orderQuantity, String returningDate, Provider provider,
+			Set<MovieReview> reviewsReceived, Set<Cart> carts, Set<Order> orders) {
+		this.id = id;
+		this.name = name;
+		this.stock = stock;
+		this.genre = genre;
+		this.mainActors = mainActors;
+		this.witers = witers;
+		this.directors = directors;
+		this.playTime = playTime;
+		this.rating = rating;
+		this.iMDbRating = iMDbRating;
+		this.description = description;
+		this.trailerLink = trailerLink;
+		this.releaseDate = releaseDate;
+		this.nrOfReviews = nrOfReviews;
+		this.averageRating = averageRating;
+		this.buyPrice = buyPrice;
+		this.rentPrice = rentPrice;
+		this.imagePath = imagePath;
+		this.orderType = orderType;
+		this.orderQuantity = orderQuantity;
+		this.returningDate = returningDate;
+		this.provider = provider;
+		this.reviewsReceived = new HashSet<MovieReview>();
+		this.carts = new HashSet<Cart>();
+		this.orders = new HashSet<Order>();
+	}
 
-    public Movie() {
-    }
+	public Movie() {
+	}
 
 	public String getReturningDate() {
 		return returningDate;
@@ -274,15 +274,20 @@ public class Movie {
 		return nrOfReviews;
 	}
 
-	public void setNrOfReviews(int nrOfReviews) {
-		this.nrOfReviews = nrOfReviews;
+	public void setNrOfReviews() {
+		this.nrOfReviews = reviewsReceived.size();
 	}
 
 	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(double averageRating) {
-		this.averageRating = averageRating;
+	public void setAverageRating() {
+		double sum = 0;
+		for (MovieReview movieReview : reviewsReceived) {
+			sum += movieReview.getRating();
+		}
+		
+		averageRating = sum/reviewsReceived.size();
 	}
 }

@@ -27,26 +27,7 @@ public class User {
 	private String profilePicture;
 	private boolean active;
 	@Transient
-    private String passwordConfirm;
-
-	public User(User user) {
-		id = user.getId();
-		userName = user.getUserName();
-		firstName = user.getFirstName();
-		email = user.getEmail();
-		userType = user.getUserType();
-		sex = user.getSex();
-		password = user.getPassword();
-		birthDate = user.getBirthDate();
-		country = user.getCountry();
-		state = user.getState();
-		city = user.getCity();
-		address = user.getAddress();
-		phoneNumber = user.getPhoneNumber();
-		active = true;
-	}
-
-
+	private String passwordConfirm;
 
 	public User(int id, String userName, String firstName, String lastName, String email, String userType, String sex,
 			String password, String birthDate, String country, String state, String city, String address,
@@ -71,7 +52,26 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 	}
 
+	public User(User user) {
+		id = user.getId();
+		userName = user.getUserName();
+		firstName = user.getFirstName();
+		email = user.getEmail();
+		userType = user.getUserType();
+		sex = user.getSex();
+		password = user.getPassword();
+		birthDate = user.getBirthDate();
+		country = user.getCountry();
+		state = user.getState();
+		city = user.getCity();
+		address = user.getAddress();
+		phoneNumber = user.getPhoneNumber();
+		active = true;
+	}
 
+	public User() {
+
+	}
 
 	public String getState() {
 		return state;

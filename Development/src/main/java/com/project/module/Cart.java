@@ -1,6 +1,6 @@
 package com.project.module;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -26,7 +26,7 @@ public class Cart {
 	private Customer customer;
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "moviesFromCart", joinColumns = @JoinColumn(name = "cartId"), inverseJoinColumns = @JoinColumn(name = "movieId"))
-	private Set<Movie> moviesInCart = new LinkedHashSet<Movie>();
+	private Set<Movie> moviesInCart = new HashSet<Movie>();
 
 	public int getId() {
 		return id;

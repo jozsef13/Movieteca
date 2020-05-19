@@ -1,7 +1,5 @@
 package com.project.controller;
 
-import java.security.Principal;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +36,14 @@ public class CartController {
 	@RequestMapping(value = "/cart/deleteMovie/{id}")
 	public ModelAndView delteMovieFromCart(@PathVariable int id, HttpServletRequest request) {
 		ModelAndView model = new ModelAndView("cart");
-		Principal principal = request.getUserPrincipal();
-		Customer customer = (Customer) principal;
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Customer customer = (Customer) userDetails.getUser();
 		Cart cart = customer.getCart();
 		Movie movie = movieService.getMovieById(id);
 		Cart updatedCart = cartService.deleteMovieFromCart(movie, cart);
+		customer.setCart(updatedCart);
+		userDetails.setUser(customer);
 		model.addObject(updatedCart);
 		return model;
 	}
@@ -57,7 +58,10 @@ public class CartController {
 			quantityInt = Integer.parseInt(quantity);
 		}
 		Movie movie = movieService.getMovieById(id);
-		Cart cart = cartService.addMovieToCart(movie, type, quantityInt, userDetails);
+		Customer customer = (Customer) userDetails.getUser();
+		Cart cart = cartService.addMovieToCart(movie, type, quantityInt, customer);
+		customer.setCart(cart);
+		userDetails.setUser(customer);
 		ModelAndView model = new ModelAndView("cart");
 		model.addObject(cart);
 		return model;
@@ -68,10 +72,12 @@ public class CartController {
 		String quantity = request.getParameter("orderQuantity");
 		int quantityInt = Integer.parseInt(quantity);
 		Movie movie = movieService.getMovieById(id);
-		Principal principal = request.getUserPrincipal();
-		Customer customer = (Customer) principal;
-		Cart cart = customer.getCart();
-		Cart updatedCart = cartService.update(movie, cart, quantityInt);
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Customer customer = (Customer) userDetails.getUser();
+		Cart updatedCart = cartService.update(movie, customer.getCart().getId(), quantityInt);
+		customer.setCart(updatedCart);
+		userDetails.setUser(customer);
 		ModelAndView model = new ModelAndView("cart");
 		model.addObject("cart", updatedCart);
 		return model;
@@ -81,10 +87,12 @@ public class CartController {
 	public ModelAndView updateTypeFromCart(@PathVariable int id, HttpServletRequest request) {
 		String type = request.getParameter("orderType");
 		Movie movie = movieService.getMovieById(id);
-		Principal principal = request.getUserPrincipal();
-		Customer customer = (Customer) principal;
-		Cart cart = customer.getCart();
-		Cart updatedCart = cartService.updateType(movie, cart, type);
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Customer customer = (Customer) userDetails.getUser();
+		Cart updatedCart = cartService.updateType(movie, customer.getCart().getId(), type);
+		customer.setCart(updatedCart);
+		userDetails.setUser(customer);
 		ModelAndView model = new ModelAndView("cart");
 		model.addObject(updatedCart);
 		return model;
@@ -96,6 +104,5 @@ public class CartController {
 		Cart cart = cartService.getCartById(id);
 		model.addObject(cart);
 		return model ;
-		
 	}
 }

@@ -28,7 +28,18 @@
 <link rel="stylesheet" href="/css/aos.css">
 
 <link rel="stylesheet" href="/css/style.css">
+<style>
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>
 </head>
 <body>
 
@@ -188,8 +199,6 @@
 												href="/movies/<c:out value = "${orderTypeRB}"/>">Rent
 												Price, Descending</a>
 											<div class="dropdown-divider"></div>
-											<a class="dropdown-item" href="#">Most bought</a> <a
-												class="dropdown-item" href="#">Most rented</a>
 										</div>
 									</div>
 								</div>
@@ -217,8 +226,8 @@
 											</p>
 											<p>
 												<strong class="text-primary h4"><c:out
-														value="${movie.rentPrice}" /> / <c:out
-														value="${movie.buyPrice}" /></strong>
+														value="${movie.rentPrice}" />$ / <c:out
+														value="${movie.buyPrice}" />$</strong>
 											</p>
 											<p>
 												<c:choose>
@@ -317,11 +326,11 @@
 									</select> <br>
 									<div class="ui-grid-a">
 										<div data-role="fieldcontain" class="ui-hide-label ui-block a">
-											<input type="text" name="minPrice" id="minPrice"
+											<input type="number" min="0" name="minPrice" id="minPrice"
 												placeholder="min">
 										</div>
 										<div data-role="fieldcontain" class="ui-hide-label ui-block b">
-											<input type="text" name="maxPrice" id="maxPrice"
+											<input type="number" min="0" name="maxPrice" id="maxPrice"
 												placeholder="max">
 										</div>
 									</div>
@@ -333,6 +342,13 @@
 							<div class="mb-4">
 								<form action="/movies/genre">
 									<h3 class="mb-3 h6 text-uppercase text-black d-block">Genre</h3>
+									<div class="col-md-10" id="error">
+										<c:if test="${not empty errorMessage }">
+											<p style="color: red; font-weight: bold; margin: 30px 0px;">
+												<i class="icon-info-circle"></i> <c:out value="${errorMessage}"></c:out>
+											</p>
+										</c:if>
+									</div>
 									<label for="s_sm" class="d-flex"> <input
 										type="checkbox" name="genre" value="Action" class="mr-2 mt-1">
 										<span class="text-black">Action</span>
