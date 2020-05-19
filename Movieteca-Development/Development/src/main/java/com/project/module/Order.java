@@ -2,9 +2,7 @@ package com.project.module;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -35,40 +33,6 @@ public class Order {
 	@JoinTable(name = "moviesFromOrder", joinColumns = @JoinColumn(name = "orderId"), inverseJoinColumns = @JoinColumn(name = "movieId"))
 	private Set<Movie> orederedMovies = new LinkedHashSet<Movie>();
 
-	public Order(int id, double totalPrice, String shippingDate, OrderStatus status, Customer customer,
-			Set<Movie> orederedMovies) {
-		super();
-		this.id = id;
-		this.totalPrice = totalPrice;
-		this.shippingDate = shippingDate;
-		this.status = status;
-		this.customer = customer;
-		this.orederedMovies = orederedMovies;
-	}
-    public Order() {
-    	
-    }
-	public Movie getMovieFromOrderById(int Id) {
-		Movie returningMovie = new Movie();
-		for (Movie movie : orederedMovies) {
-			if(movie.getId()==Id) {
-				returningMovie=movie;
-				break;
-			}
-		}
-		return returningMovie;
-	}
-	
-	public List<Movie> getMoviesFromOrderByOrderType(String type){
-		List<Movie> returningMovies = new ArrayList<Movie>();
-		for (Movie movie : orederedMovies) {
-			if(movie.getOrderType().equals(type)) {
-				returningMovies.add(movie);
-			}
-		}
-		return returningMovies;
-	}
-	
 	private String dateTime() {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		LocalDate local = LocalDate.now();

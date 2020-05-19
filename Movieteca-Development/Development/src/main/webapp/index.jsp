@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@
-taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 
@@ -16,6 +15,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/fonts/icomoon/style.css">
 
 <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -52,11 +53,11 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 										var="cart" />
 									<li><c:choose>
 											<c:when test="${empty cart}">
-											<a href="#" class="site-cart">
-												<button class="btn btn-secondary btn-sm site-cart">
-													<span class="icon icon-shopping_cart"></span> <span
-														class="count"> 0 </span>
-												</button>
+												<a href="#" class="site-cart">
+													<button class="btn btn-secondary btn-sm site-cart">
+														<span class="icon icon-shopping_cart"></span> <span
+															class="count"> 0 </span>
+													</button>
 												</a>
 											</c:when>
 											<c:when test="${not empty cart}">
@@ -177,11 +178,100 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 										Genre:
 										<c:out value="${singleMovie.genre}" />
 									</p>
-									<p align="left" class="mb-0 rated">
-										<span>Rating: </span> <span class="fa fa-star checked"></span>
-										<span class="fa fa-star checked"></span> <span
-											class="fa fa-star checked"></span> <span class="fa fa-star"></span>
-										<span class="fa fa-star"></span>
+									<p align="left" class="mb-o rated">
+										Rating: ${singleMovie.averageRating}
+										<c:choose>
+											<c:when test="${singleMovie.averageRating <= 0 }">
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 1 and singleMovie.averageRating < 2 }">
+												<span class="fa fa-star-half checked"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 2 and singleMovie.averageRating < 3 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 3 and singleMovie.averageRating < 4 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star-half checked"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 4 and singleMovie.averageRating < 5 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 5 and singleMovie.averageRating < 6 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star-half checked"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 6 and singleMovie.averageRating < 7 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 7 and singleMovie.averageRating < 8 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star-half checked"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 8 and singleMovie.averageRating < 9 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star"></span>
+											</c:when>
+											<c:when
+												test="${singleMovie.averageRating > 9 and singleMovie.averageRating < 10 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star-half checked"></span>
+											</c:when>
+											<c:when test="${singleMovie.averageRating >= 10 }">
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+											</c:when>
+										</c:choose>
+									</p>
+									<p>
+										Provided by:
+										<c:out value="${movie.provider.userName }"></c:out>
 									</p>
 								</div>
 							</div>

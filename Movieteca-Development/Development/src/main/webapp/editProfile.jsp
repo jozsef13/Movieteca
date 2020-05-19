@@ -13,7 +13,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+<meta http-equiv="Content-Type"
+	content="multipart/form-data; charset=utf-8" />
 
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
@@ -134,8 +135,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 mb-0">
-						<a href="/myaccount">My Account</a> <span class="mx-2 mb-0">/</span> <strong
-							class="text-black">Edit Profile</strong>
+						<a href="/myaccount">My Account</a> <span class="mx-2 mb-0">/</span>
+						<strong class="text-black">Edit Profile</strong>
 					</div>
 				</div>
 			</div>
@@ -146,78 +147,146 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 					<div class="row">
 						<security:authentication property="principal.user.userType"
 							var="role" />
-						<form action="/user/edit/<c:out value="${role }"/>" method="post" enctype="multipart/form-data">
-								
+						<form action="/user/edit/<c:out value="${role }"/>" method="post"
+							enctype="multipart/form-data">
 							<div class="col-md-12">
-								<u><h2 class="text-black">Account Info</h2></u>
-								Profile picture: <input type="file" class="form-control"
-									id="img" name="img">
-									<br> 
-									<b>Username:</b>
-								<input type="text" class="form-control" name="userName"
-									id="c_username" value="<security:authentication property="principal.username" />" readonly />
-								<br><b>Password: </b><input type="password" class="form-control" name="password" id="c_password" value="<security:authentication property="principal.password"/>"/>
+								<u><h2 class="text-black">Account Info</h2></u> Profile picture:
+								<input type="file" class="form-control" id="img" name="img">
+								<br> <b>Username:</b> <input type="text"
+									class="form-control" name="userName" id="c_username"
+									value="<security:authentication property="principal.username" />"
+									readonly /> <br> <b>Password: </b><input type="password"
+									class="form-control" name="password" id="c_password"
+									value="<security:authentication property="principal.password"/>" />
 								<br> <b>Last Name:</b> <input type="text"
-									class="form-control" name="lastName" id="c_lastName" value="<security:authentication property="principal.user.lastName" />"/>
-								
+									class="form-control" name="lastName" id="c_lastName"
+									value="<security:authentication property="principal.user.lastName" />" />
+
 								<br> <b>First Name:</b> <input type="text"
-									class="form-control" name="firstName" id="c_firstName" value="<security:authentication property="principal.user.firstName" />" />
-								
+									class="form-control" name="firstName" id="c_firstName"
+									value="<security:authentication property="principal.user.firstName" />" />
+
 								<br> <b>Email:</b> <input type="text" class="form-control"
-									name="email" id="c_email" readonly value="<security:authentication property="principal.user.email" />"/>
-								
+									name="email" id="c_email" readonly
+									value="<security:authentication property="principal.user.email" />" />
+
 								<br> <b>Birthdate:</b> <input type="date"
-									class="form-control" name="birthDate" id="c_bDay" value="<security:authentication property="principal.user.birthDate" />">
-								
+									class="form-control" name="birthDate" id="c_bDay"
+									value="<security:authentication property="principal.user.birthDate" />">
+
 								<br> <b>Location:</b>
 								<div class="col-md-12">
-									<input type="text" class="form-control" name="city"
-										id="c_city" value="<security:authentication property="principal.user.city" />"/>
-									
+									<input type="text" class="form-control" name="city" id="c_city"
+										value="<security:authentication property="principal.user.city" />" />
+
 								</div>
 								<div class="col-md-12">
 									<input type="text" class="form-control" name="state"
-										id="c_state" value="<security:authentication property="principal.user.state" />"/>
-									
+										id="c_state"
+										value="<security:authentication property="principal.user.state" />" />
+
 								</div>
 								<div class="col-md-12">
-									<input type="text" class="form-control" name="country" id="c_country" value="<security:authentication property="principal.user.country" />" readonly/>
-									
+									<input type="text" class="form-control" name="country"
+										id="c_country"
+										value="<security:authentication property="principal.user.country" />"
+										readonly />
+
 								</div>
 								<br> <b>Address:</b> <input type="text"
-									class="form-control" name="address" id="c_address"  value="<security:authentication property="principal.user.address" />"/>
-								
+									class="form-control" name="address" id="c_address"
+									value="<security:authentication property="principal.user.address" />" />
+
 								<br> <b>Phone Number:</b> <input type="text"
-									class="form-control" name="phoneNumber" id="c_phoneNumber" value="<security:authentication property="principal.user.phoneNumber" />"/>
-								
+									class="form-control" name="phoneNumber" id="c_phoneNumber"
+									value="<security:authentication property="principal.user.phoneNumber" />" />
+
 								<br> <b>Gender:</b> <input type="text" class="form-control"
-									name="sex" id="c_sex" readonly value="<security:authentication property="principal.user.sex" />"/>
-								
-								<br> <input type="submit" value="Submit"
-								class="buy-now btn btn-sm btn-primary">
+									name="sex" id="c_sex" readonly
+									value="<security:authentication property="principal.user.sex" />" />
+
+								<br>
+								<security:authorize access="hasRole('Provider')">
+									<b>Payment Plan</b><input type="text" class="form-control"
+									name="plan" id="c_plan" readonly
+									value="<security:authentication property="principal.user.paymentPlan.planType" />" />
+									<br><b>Change Payment Plan: </b>
+									<select name="paymentPlanText" class="form-control" id="plan"
+										onchange="displayStuff()">
+										<option value="Basic">Basic, $4.99/month</option>
+										<option value="Advanced">Advanced, $10.99/month</option>
+										<option value="Ultimate">Ultimate, 15.99/month</option>
+									</select>
+									<p id="Basic">
+										<small><i class="icon-info-circle"></i> Basic: you
+											will be able to have only 20 posts(movies) for sale/rent, and
+											a stock of 40/movie.</small>
+									</p>
+									<p id="Advanced" style="display: none">
+										<small><i class="icon-info-circle"></i> Advanced: you
+											will be able to have only 50 posts(movies) for sale/rent, and
+											a stock of 100/movie.</small>
+									</p>
+									<p id="Ultimate" style="display: none">
+										<small><i class="icon-info-circle"></i> Ultimate: you
+											will be able to have unlimited posts and unlimited stock.</small>
+									</p>
+								</security:authorize>
+								<div class="col-md-5" style="display: inline-block">
+									<a href="/myaccount" class="btn btn-danger btn-md btn-block">Back</a>
+								</div>
+								<div class="col-md-5" style="display: inline-block">
+									<input style="display: inline-block" type="submit"
+										class="btn btn-primary btn-lg btn-block" value="Submit">
+								</div>
 							</div>
-							
+
 						</form>
 					</div>
 				</div>
-				</div>
+			</div>
 		</security:authorize>
-		</div>
+	</div>
 
-		<script src="/js/jquery-3.3.1.min.js"></script>
-		<script src="/js/jquery-ui.js"></script>
-		<script src="/js/popper.min.js"></script>
-		<script src="/js/bootstrap.min.js"></script>
-		<script src="/js/owl.carousel.min.js"></script>
-		<script src="/js/jquery.magnific-popup.min.js"></script>
-		<script src="/js/aos.js"></script>
+	<script src="/js/jquery-3.3.1.min.js"></script>
+	<script src="/js/jquery-ui.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/owl.carousel.min.js"></script>
+	<script src="/js/jquery.magnific-popup.min.js"></script>
+	<script src="/js/aos.js"></script>
 
-		<script src="/js/main.js"></script>
+	<script src="/js/main.js"></script>
 
-		<script>
-			function myFunction() {
-				location.href = "/myaccount"
-			};
-		</script>
+	<script>
+		function myFunction() {
+			location.href = "/myaccount"
+		};
+	</script>
+	<script type="text/javascript">
+		function displayStuff() {
+			var e = document.getElementById('plan');
+			var val = e.options[e.selectedIndex].value;
+
+			switch (val) {
+			case "Basic":
+				document.getElementById('Basic').style.display = 'block';
+				document.getElementById('Advanced').style.display = 'none';
+				document.getElementById('Ultimate').style.display = 'none';
+				break;
+			case "Advanced":
+				document.getElementById('Advanced').style.display = 'block';
+				document.getElementById('Basic').style.display = 'none';
+				document.getElementById('Ultimate').style.display = 'none';
+				break;
+			case "Ultimate":
+				document.getElementById('Ultimate').style.display = 'block';
+				document.getElementById('Basic').style.display = 'none';
+				document.getElementById('Advanced').style.display = 'none';
+				break;
+			}
+
+		}
+	</script>
 </body>
 </html>

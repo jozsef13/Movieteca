@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@
-taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 
@@ -16,6 +14,8 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/fonts/icomoon/style.css">
 
 <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -127,74 +127,28 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 		</ul>
 	</div>
 	</nav> </header>
-		<div class="bg-light py-3">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12 mb-0">
-						<a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
-							class="text-black">Login</strong>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<div class="site-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<h2 class="h3 mb-3 text-black">Login here</h2>
-					</div>
-					<div class="col-md-7">
-						<form action="/login" method="POST">
-							<div class="p-3 p-lg-5 border">
-								<div class="form-group column">
-									<div class="col-md-10">
-										<label for="c_fname" class="text-black"><b> User
-												Type </b><br> <input type="radio" name="userType"
-											value="Customer"> Customer <input type="radio"
-											name="userType" value="Provider"> Provider <input
-											type="radio" name="userType" value="Admin">
-											Administrator <br></label>
-									</div>
-									<c:if test="${not empty errorMessage}">
-										<div id="error" class="col-md-6" style="color: red; font-weight: bold; margin: 30px 0px;">
-											<c:out value="${errorMessage}" />
-										</div>
-									</c:if>
-									<div class="col-md-6">
-										<label for="c_fname" class="text-black"> <b>
-												Username </b></label> <input type="text" class="form-control"
-											id="username" name="username" required>
-									</div>
-									<div class="col-md-6">
-										<label for="c_lname" class="text-black"> <b>
-												Password </b></label> <input type="password" class="form-control"
-											id="password" name="password" required>
-										<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-									</div>
-								</div>
-								<br>
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span><strong class="text-black">Forbidden</strong></div>
+        </div>
+      </div>
+    </div>
 
-								<div class="col-lg-13">
-									<input type="submit" name="submit"
-										class="btn btn-primary btn-lg btn-block" value="LOG IN! ">
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="col-md-5 ml-auto">
-						<br> <br> <br> <a href="/register"
-							class="btn btn-primary btn-lg btn-block">Don't have an
-							account?</a>
-						<div class="col-lg-12"></div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-	</div>
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <span class="icon-cancel display-3 text-danger"></span>
+            <h2 class="display-3 text-black">Ooops!</h2>
+            <p class="lead mb-5">Sorry, this part of the website is restricted for you.</p>
+            <p><a href="/" class="btn btn-sm btn-primary">Get me back home</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 	<script src="/js/jquery-3.3.1.min.js"></script>
 	<script src="/js/jquery-ui.js"></script>
@@ -206,16 +160,10 @@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 	<script src="/js/main.js"></script>
 	<script>
-		var fade_out = function() {
-			$("#error").fadeOut().empty();
-		}
-
-		setTimeout(fade_out, 5000);
-	</script>
-<script>
 		function myFunction() {
 			location.href = "/myaccount"
 		};
 	</script>
 </body>
 </html>
+

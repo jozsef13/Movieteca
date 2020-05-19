@@ -16,14 +16,25 @@ public class Request {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String requestType;
-	private RequestStatus status;
+	private RequestStatus status = RequestStatus.Sent;
 	private String requestObject;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "adminId", nullable = false)
+	@JoinColumn(name = "adminId", nullable = true)
 	private Admin admin;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "providerId", nullable=false)
+	@JoinColumn(name = "providerId", nullable = true)
 	private Provider provider;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "customerId", nullable=true)
+	private Customer customer;
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 
 	public int getId() {
 		return id;

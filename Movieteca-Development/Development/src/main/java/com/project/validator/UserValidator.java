@@ -20,7 +20,7 @@ public class UserValidator {
 		if (user.getUserType() == null) {
 			errors.add("You must choose a role!");
 		} else {
-			if (userService.userExists(user.getUserName())) {
+			if (userService.userExists(user.getUserName()) != null) {
 				errors.add("Username " + user.getUserName() + " is already taken! Choose another one!");
 			}
 			if (user.getPassword().length() < 8) {
@@ -34,6 +34,9 @@ public class UserValidator {
 			}
 			if(userService.emailExists(user.getEmail())) {
 				errors.add("User with email " + user.getEmail() + " is already registered!" );
+			}
+			if(!user.getPhoneNumber().matches("^[0][7][0-9]{8}")) {
+				errors.add("Phone number is incorrect! It must start with 07 and continue with 8 digits!");
 			}
 		}
 		

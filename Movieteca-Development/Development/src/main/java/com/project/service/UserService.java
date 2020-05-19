@@ -25,6 +25,7 @@ import com.project.module.MyUserDetails;
 import com.project.module.PaymentPlan;
 import com.project.module.PlanType;
 import com.project.module.Provider;
+import com.project.module.ProviderReview;
 import com.project.module.User;
 import com.project.repository.AdminRepository;
 import com.project.repository.CustomerRepository;
@@ -60,9 +61,15 @@ public class UserService implements UserDetailsService {
 		if (userName == null || userName.isEmpty()) {
 			throw new UsernameNotFoundException("Username field is empty!");
 		}
-
 		String userTypeRole = request.getParameter("userType");
-		User user = null;
+
+		if (userTypeRole == null || userTypeRole.isEmpty()) {
+			userTypeRole = request.getAttribute("userType").toString();
+		}
+
+		System.out.println(passwordEncoder.encode("gabrielAdmin"));
+
+		User user = new User();
 		if (userTypeRole.equals("Admin")) {
 			user = adminRepository.findByUserName(userName);
 			if (user == null) {
@@ -84,25 +91,27 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public boolean userExists(String userName) {
-		if (adminRepository.findByUserName(userName) != null || customerRepository.findByUserName(userName) != null
-				|| providerRepository.findByUserName(userName) != null) {
-			return true;
+	public User userExists(String userName) {
+		if (adminRepository.findByUserName(userName) != null) {
+			return adminRepository.findByUserName(userName);
+		} else if (providerRepository.findByUserName(userName) != null) {
+			return providerRepository.findByUserName(userName);
+		} else if (customerRepository.findByUserName(userName) != null) {
+			return customerRepository.findByUserName(userName);
 		}
 
-		return false;
+		return null;
 	}
 
-	public void save(User user) {
-		String role = request.getParameter("userType");
-		user.setUserType(role);
+	public void save(User user, String userType) {
+		user.setUserType(userType);
 
-		if (role.equals("Customer")) {
+		if (userType.equals("Customer")) {
 			Customer customer = createCustomer(user);
 			customerRepository.save(customer);
 		} else {
 			Provider provider = createProvider(user);
-			String paymentPlanName =  request.getParameter("paymentPlan");
+			String paymentPlanName = request.getParameter("paymentPlan");
 			PaymentPlan paymentPlan = paymentPlanRepository.findByPlanType(PlanType.valueOf(paymentPlanName));
 			provider.setPaymentPlan(paymentPlan);
 			paymentPlan.getProviders().add(provider);
@@ -170,30 +179,6 @@ public class UserService implements UserDetailsService {
 		return false;
 	}
 
-	public void update(User user, MultipartFile img) throws IOException {
-		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal();
-		String imgFile = "/images/" + img.getOriginalFilename();
-		File upl = new File("src/main/resources/static" + imgFile);
-		upl.createNewFile();
-		FileOutputStream fout = new FileOutputStream(upl);
-		fout.write(img.getBytes());
-		fout.close();
-		user.setProfilePicture(imgFile);
-		user.setId(userDetails.getUser().getId());
-		user.setPassword(userDetails.getPassword());
-		user.setUserType(userDetails.getUser().getUserType());
-		userDetails.setUser(user);
-		if (userDetails.getUser().getUserType().equals("Admin")) {
-			adminRepository.save((Admin) userDetails.getUser());
-		} else if (userDetails.getUser().getUserType().equals("Customer")) {
-			Customer customer = createCustomer(userDetails.getUser());
-			customerRepository.save(customer);
-		} else if (userDetails.getUser().getUserType().equals("Provider")) {
-			providerRepository.save((Provider) userDetails.getUser());
-		}
-	}
-
 	public void updateCustomer(Customer user, MultipartFile img) throws IOException {
 		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
@@ -210,15 +195,18 @@ public class UserService implements UserDetailsService {
 			user.setProfilePicture(lastCustomer.getProfilePicture());
 		}
 		user.setId(userDetails.getUser().getId());
-		
+
 		user.setCart(lastCustomer.getCart());
 		user.setMessages(lastCustomer.getMessages());
 		user.setMovieReviewsAdded(lastCustomer.getMovieReviewsAdded());
 		user.setProviderReviewsAdded(lastCustomer.getProviderReviewsAdded());
 		user.setOrders(lastCustomer.getOrders());
-		if (!user.getPassword().matches(lastCustomer.getPassword())) {
+		if (!user.getPassword().equals(lastCustomer.getPassword())) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		} else {
+			user.setPassword(lastCustomer.getPassword());
 		}
+
 		user.setUserType(lastCustomer.getUserType());
 		user.setActive(true);
 		userDetails.setUser(user);
@@ -241,22 +229,30 @@ public class UserService implements UserDetailsService {
 		} else {
 			user.setProfilePicture(lastProvider.getProfilePicture());
 		}
-		
+
 		user.setId(userDetails.getUser().getId());
 		user.setMoviesPosted(lastProvider.getMoviesPosted());
-		user.setPaymentPlan(lastProvider.getPaymentPlan());
 		user.setReceivedReviews(lastProvider.getReceivedReviews());
 		user.setRequestsSent(lastProvider.getRequestsSent());
 		user.setMessages(lastProvider.getMessages());
-		if (!user.getPassword().matches(lastProvider.getPassword())) {
+		String paymentPlanName = request.getParameter("paymentPlanText");
+		PaymentPlan paymentPlan = paymentPlanRepository.findByPlanType(PlanType.valueOf(paymentPlanName));
+		if(paymentPlan != lastProvider.getPaymentPlan()) {
+			user.setPaymentPlan(paymentPlan);
+		} else {
+			user.setPaymentPlan(lastProvider.getPaymentPlan());
+		}
+		if (!user.getPassword().equals(lastProvider.getPassword())) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		} else {
+			user.setPassword(lastProvider.getPassword());
 		}
 		user.setUserType(lastProvider.getUserType());
 		user.setActive(true);
 		userDetails.setUser(user);
-		
+
 		providerRepository.save(user);
-		
+
 	}
 
 	public void updateAdmin(Admin user, MultipartFile img) throws IOException {
@@ -274,17 +270,91 @@ public class UserService implements UserDetailsService {
 		} else {
 			user.setProfilePicture(lastAdmin.getProfilePicture());
 		}
-		
+
 		user.setId(userDetails.getUser().getId());
 		user.setReceivedRequests(lastAdmin.getReceivedRequests());
-		if (!user.getPassword().matches(lastAdmin.getPassword())) {
+		if (!user.getPassword().equals(lastAdmin.getPassword())) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 		}
 		user.setUserType(lastAdmin.getUserType());
 		user.setActive(true);
 		userDetails.setUser(user);
-		
+
 		adminRepository.save(user);
+
+	}
+
+	public void deleteUser(User user) {
+		if (user.getUserType().equals("Admin")) {
+			Admin admin = adminRepository.getOne(user.getId());
+			adminRepository.delete(admin);
+			adminRepository.flush();
+		} else if (user.getUserType().equals("Provider")) {
+			Provider provider = providerRepository.getOne(user.getId());
+			providerRepository.delete(provider);
+			providerRepository.flush();
+		} else if (user.getUserType().equals("Customer")) {
+			Customer customer = customerRepository.getOne(user.getId());
+			customerRepository.delete(customer);
+			customerRepository.flush();
+		}
+	}
+
+	public Provider getProviderById(int id) {
+		return providerRepository.getOne(id);
+	}
+
+	public User getUserById(int id) {
+		if (adminRepository.existsById(id)) {
+			return adminRepository.getOne(id);
+		} else if (providerRepository.existsById(id)) {
+			return providerRepository.getOne(id);
+		} else if (customerRepository.existsById(id)) {
+			return customerRepository.getOne(id);
+		}
+
+		return null;
+	}
+
+	public Provider addReviewToProvider(int id, ProviderReview review) {
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		Customer customer = (Customer) userDetails.getUser();
+		Provider provider = providerRepository.getOne(id);
+		review.setCustomer(customer);
+		review.setProvider(provider);
+		customer.getProviderReviewsAdded().add(review);
+		provider.getReceivedReviews().add(review);
+		provider.setAverageRating();
+		provider.setNrOfReviews();
 		
+		providerRepository.save(provider);
+		return provider;
+	}
+
+	public User banUser(int id) {
+		User user = getUserById(id);
+		user.setActive(false);
+		if(user.getUserType().equals("Customer")) {
+			Customer customer = (Customer) user;
+			customerRepository.save(customer);
+		} else if(user.getUserType().equals("Provider")) {
+			Provider provider = (Provider) user;
+			providerRepository.save(provider);
+		}
+		return user;
+	}
+
+	public User activateAccount(int id) {
+		User user = getUserById(id);
+		user.setActive(true);
+		if(user.getUserType().equals("Customer")) {
+			Customer customer = (Customer) user;
+			customerRepository.save(customer);
+		} else if(user.getUserType().equals("Provider")) {
+			Provider provider = (Provider) user;
+			providerRepository.save(provider);
+		}
+		return user;
 	}
 }
