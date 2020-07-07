@@ -7,3 +7,5 @@ Built with:
  - Rest web services
  - MySQL
  - JPA and JSP
+ 
+ For testing we used Spring Boot Test and JUnit. Mock was used in order to test the repositories and the services.
